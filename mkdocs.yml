@@ -1,0 +1,97 @@
+site_name: FlyingRC® 产品说明书
+site_description: 统一内容源 · 模块化维护 · 在线阅读与 PDF
+site_url: https://manual.flyingrc.cn
+docs_dir: docs
+site_dir: site
+
+theme:
+  name: material
+  language: zh
+  palette:
+    - scheme: default
+      primary: blue grey
+      accent: teal
+      toggle:
+        icon: material/brightness-7
+        name: 切换到深色
+    - scheme: slate
+      primary: blue grey
+      accent: teal
+      toggle:
+        icon: material/brightness-4
+        name: 切换到浅色
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.tabs.link
+  icon:
+    repo: fontawesome/brands/github
+
+plugins:
+  - search
+  - minify:
+      minify_html: true
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets:
+      base_path:
+        - docs
+      check_paths: true
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - tables
+  - attr_list
+  - md_in_html
+  - toc:
+      permalink: true
+  - footnotes
+
+extra:
+  social:
+    - icon: fontawesome/brands/qq
+      link: https://qm.qq.com/
+  generator: false
+
+nav:
+  - 首页: index.md
+  - 产品说明书:
+      - 飞控:
+          - F4WSE PRO: products/f4wse-pro/index.md
+          - F4Wing Mini MK1: products/f4wing-mini/index.md
+      - 电调:
+          - AM32 75A ESC V2.5: products/am32-75a-v25/index.md
+  - 公共说明:
+      - 安全注意事项: shared/safety.md
+      - 首次使用检查: shared/first-use-check.md
+      - 焊接注意事项: shared/soldering.md
+      - 售后与保修: shared/warranty.md
+      - 技术支持: shared/support.md
+      - 固件下载说明: shared/firmware-download.md
+      - 常见问题: shared/faq.md
+      - 品牌介绍: shared/brand-intro.md
+      - 免责声明: shared/disclaimer.md
+  - 系列通用:
+      - 飞控:
+          - USB 驱动: shared/flight-controller/usb-driver.md
+          - ArduPilot 刷写: shared/flight-controller/ardupilot-flashing.md
+          - INAV 刷写: shared/flight-controller/inav-flashing.md
+          - Betaflight 刷写: shared/flight-controller/betaflight-flashing.md
+          - 接收机连接: shared/flight-controller/receiver-wiring.md
+      - 电调:
+          - AM32 调参与固件: shared/esc/am32-setup.md
+          - 电机转向: shared/esc/motor-direction.md
+      - CAN:
+          - CAN 总线接线: shared/can/can-wiring.md

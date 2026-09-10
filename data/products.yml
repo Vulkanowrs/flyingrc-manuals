@@ -1,0 +1,167 @@
+# FlyingRC 产品参数数据库
+# 说明书参数表、官网产品列表、下载页可共用本文件
+# 必填字段：name, category, status, short_code
+# 公共内容口径源：docs 公共章节以 F4WSE PRO 手册 2026-08-15 版为准
+
+f4wse-pro:
+  name: FlyingRC® F4WSE PRO
+  name_en: FlyingRC F4WSE PRO
+  category: flight-controller
+  series: fixed-wing
+  revision: Pro
+  status: active
+  short_code: f4wse
+  manual_url: /manual/f4wse-pro/
+  firmware_url: /downloads/f4wse-pro/
+  price_cny: 140
+  manual_updated: "2026-08-15"
+  is_content_source_of_truth: true
+  mcu: STM32F405RGT6
+  mcu_mhz: 168
+  flash_kb: 1024
+  ram_kb: 192
+  imu:
+    - ICM-42688-P
+    - BMI270
+  barometer:
+    - SPA06-001
+  magnetometer: none
+  osd_analog: AT7465E
+  size_mm: "22.86 x 43.18 x 9"
+  weight_g: 9.1
+  uart_count: 6
+  pwm_count: 12
+  i2c_count: 1
+  current_adc: "80A cont / 120A burst"
+  bec_device: "5V3A"
+  bec_servo: "5V5A"
+  power_input_v: "7-28V (2-6S LiPo)"
+  usb: "Type-C external board"
+  blackbox: "External TF, max usable 4GB (up to 32GB card)"
+  sbus_inverted: true
+  firmware:
+    - ArduPilot
+    - INAV
+    - Betaflight
+  firmware_target: MatekF405-TE
+  firmware_inav_target: MatekF405TE_SD
+  assets:
+    hero: assets/f4wse-pro/product-hero.jpg
+    layout_front: assets/f4wse-pro/layout-front.jpg
+    layout_back: assets/f4wse-pro/layout-back.jpg
+
+f4wing-mini:
+  name: FlyingRC® F4Wing Mini
+  name_en: FlyingRC F4Wing Mini
+  category: flight-controller
+  series: fixed-wing
+  revision: MK1
+  status: active          # active | eol | discontinued
+  short_code: f4wing
+  manual_url: /manual/f4wing-mini/
+  firmware_url: /downloads/f4wing-mini/
+  price_cny: 89
+  mcu: STM32F405RGT6
+  mcu_mhz: 168
+  flash_kb: 1024
+  ram_kb: 192
+  imu:
+    - ICM42688P
+    - ICM42605
+    - BMI270
+  barometer:
+    - SPL06-001
+    - SPA06-003
+  magnetometer: none
+  osd_analog: false
+  size_mm: "27.9 x 20.3 x 11.2"
+  mount_holes_mm: "17.8 x 17.8"
+  mount_screw: M1.2
+  weight_g:
+    bare: 2.8
+    with_headers: 5.3
+  uart_count: 3
+  pwm_count: 7
+  i2c_count: 1
+  sbus: true
+  onboard_bec: false
+  power_input_v: 5
+  vbat_range: "2.5-30V (1-6S LiPo)"
+  usb: "Type-C onboard"
+  firmware:
+    - ArduPilot
+    - INAV
+    - Betaflight
+  firmware_unsupported:
+    - PX4
+  hardware_revisions:
+    - id: V1
+      imu: TBD
+      baro: SPL06
+      status: discontinued
+    - id: V2
+      imu: ICM42688P
+      baro: SPL06
+      status: eol
+    - id: V3
+      imu: ICM42605
+      baro: SPA06
+      status: active
+    - id: V5
+      imu: BMI270
+      baro: SPA06-003
+      status: active
+  assets:
+    hero: assets/f4wing-mini/product-hero.jpg
+    layout_front: assets/f4wing-mini/layout-front.png
+    layout_back: assets/f4wing-mini/layout-back.png
+
+am32-75a-v25:
+  name: FlyingRC® AM32 75A ESC V2.5
+  name_en: FlyingRC AM32 75A Single ESC V2.5
+  category: esc
+  series: am32
+  revision: V2.5
+  status: active
+  short_code: 75a
+  manual_url: /manual/am32-75a-v25/
+  firmware_url: /downloads/am32-75a-v25/
+  price_cny: 87
+  mcu: AT32F421K8U7
+  mcu_mhz: 120
+  flash_kb: 64
+  ram_kb: 16
+  gate_driver:
+    - FD6288
+    - JSM6288Q
+  mosfet: IRF7480
+  continuous_current_a: 75
+  burst_current_a: 85
+  current_test_condition: "4S"
+  vbat_range: "7-28V DC (2-6S LiPo)"
+  size_mm: "38 x 19 x 7.4"
+  weight_g: 8
+  bec:
+    available: true
+    chip: SC8102
+    default: "5V4A"
+    optional: "7V3A (short 7.4V pad)"
+  protocols:
+    - DShot150
+    - DShot300
+    - DShot600
+    - OneShot
+    - PWM
+  telemetry_rpm: true
+  firmware: AM32
+  hardware_revisions:
+    - id: V2.5
+      status: active
+  assets:
+    hero: assets/am32-75a-v25/product-hero.png
+    control_board: assets/am32-75a-v25/layout-control-board.png
+    power_board: assets/am32-75a-v25/layout-power-board.png
+
+# 占位：后续迁移更多产品时补充
+# h7d-pro:
+#   name: ...

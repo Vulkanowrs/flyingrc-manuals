@@ -1,0 +1,23 @@
+# Build
+site/
+.cache/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Local secrets (never commit)
+.env
+*.token
+
+# Temp extract
+extract_out/
