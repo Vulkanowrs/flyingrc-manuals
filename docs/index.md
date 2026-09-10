@@ -10,6 +10,8 @@
 | F4Wing Mini MK1 | 固定翼飞控 | 在售 | [阅读](products/f4wing-mini/index.md) |
 | AM32 75A ESC V2.5 | 单体电调 | 在售 | [阅读](products/am32-75a-v25/index.md) |
 
+更多型号见 [产品总目录](catalog.md)（飞控 / 电调 / 飞塔 / BEC / 模块 / 外设）。
+
 !!! info "公共内容口径"
 
     售后、支持、品牌等公共章节以 **F4WSE PRO 手册（2026-08-15）** 为唯一口径源。其它产品说明书与之不一致处，一律以该手册为准。

@@ -316,6 +316,12 @@ BATT_AMP_PERVLT  = 100
 
 ---
 
+## FlyingRC® 其它产品
+
+--8<-- "shared/other-products.md"
+
+---
+
 ## 免责声明
 
 --8<-- "shared/disclaimer.md"

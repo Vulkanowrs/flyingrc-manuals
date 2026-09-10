@@ -67,6 +67,7 @@ extra:
 
 nav:
   - 首页: index.md
+  - 产品总目录: catalog.md
   - 产品说明书:
       - 飞控:
           - F4WSE PRO: products/f4wse-pro/index.md
