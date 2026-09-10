@@ -45,6 +45,21 @@ python -m mkdocs build --strict
 
 产物在 `site/`。GitHub Actions：`.github/workflows/check.yml`、`deploy.yml`。
 
+## 发布目标（两阶段）
+
+| 阶段 | 站点 | 说明 |
+|------|------|------|
+| 现在 | `https://vulkanowrs.github.io/flyingrc-manuals/` | 公开仓库 GitHub Pages，长期免费 |
+| 以后 | `www.flyingrc.cn`（如 `manual.flyingrc.cn`） | 迁到自有服务器/官网，仓库与内容源不变 |
+
+迁到官网时只需：
+
+1. 改 `mkdocs.yml` 的 `site_url` 为正式域名  
+2. 增加一条部署任务（推到你们 Nginx/OSS/静态目录，或自建 Runner）  
+3. 包装短链仍用 `flyingrc.cn/m/<short_code>`，指向正式说明书路径  
+
+`data/products.yml` 里的 `short_code`（`f4wse` / `f4wing` / `75a`）可直接作短链后缀。
+
 ## 新增产品
 
 1. 在 `data/products.yml` 增加型号与参数（`name` / `category` / `status` / `short_code` 必填）。
@@ -74,8 +89,8 @@ python -m mkdocs build --strict
 
 ## 待确认
 
-- 包装短链：`flyingrc.cn/m/f4wse`、`f4wing`、`75a` 是否采用
-- 云文档与本地导出稿是否一致（如云文档已再改，请导出最新 docx 再对齐一次）
-- 官网 / GitHub 仓库
-- PDF 导出工作流
+- 包装短链：`flyingrc.cn/m/f4wse`、`f4wing`、`75a` 是否采用  
+- 云文档与本地导出稿是否一致（如云文档已再改，请导出最新 docx 再对齐一次）  
+- 迁到 `www.flyingrc.cn` 的时间与服务器/域名绑定方式  
+- PDF 导出工作流（暂不需要）  
 
