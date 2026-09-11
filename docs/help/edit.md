@@ -4,7 +4,7 @@
 
 ## 1. 在线管理页（推荐给管理员）
 
-打开：**[说明书管理页](admin/index.html)**
+打开：**[说明书管理页](../admin/index.html)**
 
 1. 用 GitHub Token 登录（需 `repo` 权限）
 2. 左侧选择 `docs/` 下的 Markdown
