@@ -28,8 +28,14 @@ theme:
     - search.highlight
     - content.code.copy
     - content.tabs.link
+    - content.action.edit
+    - content.action.view
   icon:
     repo: fontawesome/brands/github
+
+repo_url: https://github.com/Vulkanowrs/flyingrc-manuals
+repo_name: Vulkanowrs/flyingrc-manuals
+edit_uri: edit/main/docs/
 
 plugins:
   - search
@@ -96,3 +102,5 @@ nav:
           - 电机转向: shared/esc/motor-direction.md
       - CAN:
           - CAN 总线接线: shared/can/can-wiring.md
+  - 内部:
+      - 如何修改说明书: help/edit.md

@@ -46,4 +46,4 @@
 
 1. 公共内容放在 `docs/shared/`，产品页用 snippets 语法引用相对路径下的 .md，不要复制粘贴正文。
 2. 新增产品：在 `data/products.yml` 加参数 → 建 `docs/products/<slug>/index.md` → 放图片到 `docs/assets/<slug>/` → 更新 `mkdocs.yml` nav。
-3. 提交前运行 `python scripts/check_docs.py`。
+3. 日常改字可用 [管理页](admin/index.html) 或每页右上角「编辑此页」；提交前运行 `python scripts/check_docs.py`。详见 [如何修改说明书](help/edit.md)。

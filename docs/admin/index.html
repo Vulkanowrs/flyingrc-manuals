@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex" />
+<title>FlyingRC 说明书管理</title>
+<style>
+:root {
+  --bg: #0f1419;
+  --panel: #1a2332;
+  --border: #2d3a4d;
+  --text: #e7ecf3;
+  --muted: #8b9bb4;
+  --accent: #2bb0a6;
+  --accent2: #3d8bfd;
+  --danger: #e85d5d;
+  --ok: #3fb950;
+  --warn: #d29922;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; font-family: "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+  background: var(--bg); color: var(--text); min-height: 100vh;
+}
+header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 20px; border-bottom: 1px solid var(--border); background: var(--panel);
+  position: sticky; top: 0; z-index: 10;
+}
+header h1 { margin: 0; font-size: 16px; font-weight: 600; letter-spacing: .02em; }
+header .meta { color: var(--muted); font-size: 12px; }
+.wrap { display: grid; grid-template-columns: 280px 1fr; height: calc(100vh - 54px); }
+.side {
+  border-right: 1px solid var(--border); background: #121a24;
+  display: flex; flex-direction: column; min-height: 0;
+}
+.side-top { padding: 12px; border-bottom: 1px solid var(--border); }
+.side-top input, .main input[type=text], .main textarea, .main select {
+  width: 100%; background: var(--bg); color: var(--text);
+  border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px;
+  font-size: 13px; outline: none;
+}
+.side-top input:focus, .main textarea:focus { border-color: var(--accent); }
+.file-list { overflow: auto; flex: 1; padding: 8px; }
+.file-item {
+  padding: 8px 10px; border-radius: 8px; cursor: pointer; font-size: 12px;
+  color: var(--muted); margin-bottom: 2px; word-break: break-all;
+}
+.file-item:hover { background: #1c2838; color: var(--text); }
+.file-item.active { background: #1e3a3a; color: var(--accent); }
+.main { display: flex; flex-direction: column; min-height: 0; }
+.toolbar {
+  display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+  padding: 12px 16px; border-bottom: 1px solid var(--border);
+}
+.path { flex: 1; font-size: 13px; color: var(--muted); min-width: 120px; word-break: break-all; }
+button {
+  background: var(--accent); color: #042220; border: 0; border-radius: 8px;
+  padding: 9px 14px; font-size: 13px; font-weight: 600; cursor: pointer;
+}
+button.secondary { background: #243244; color: var(--text); }
+button.danger { background: var(--danger); color: #fff; }
+button:disabled { opacity: .45; cursor: not-allowed; }
+.editor-wrap { flex: 1; display: grid; grid-template-columns: 1fr 1fr; min-height: 0; }
+.editor-wrap.single { grid-template-columns: 1fr; }
+textarea#editor {
+  width: 100%; height: 100%; resize: none; border: 0; border-radius: 0;
+  padding: 16px; font: 13px/1.55 "Cascadia Code", Consolas, "PingFang SC", monospace;
+  background: #0d1218; color: var(--text);
+}
+#preview {
+  overflow: auto; padding: 16px 20px; border-left: 1px solid var(--border);
+  background: #101820; font-size: 14px; line-height: 1.7;
+}
+#preview h1, #preview h2, #preview h3 { border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+#preview table { border-collapse: collapse; width: 100%; font-size: 13px; }
+#preview th, #preview td { border: 1px solid var(--border); padding: 6px 8px; }
+#preview th { background: #1a2433; }
+#preview code { background: #1a2433; padding: 1px 5px; border-radius: 4px; font-size: 12px; }
+#preview pre { background: #0d1218; padding: 12px; border-radius: 8px; overflow: auto; }
+#preview blockquote { border-left: 3px solid var(--accent); margin: 0; padding: 4px 12px; color: var(--muted); }
+#preview img { max-width: 100%; }
+.login {
+  max-width: 420px; margin: 12vh auto; background: var(--panel);
+  border: 1px solid var(--border); border-radius: 14px; padding: 28px;
+}
+.login h2 { margin: 0 0 8px; font-size: 18px; }
+.login p { color: var(--muted); font-size: 13px; line-height: 1.6; }
+.login label { display: block; font-size: 12px; color: var(--muted); margin: 14px 0 6px; }
+.login button { width: 100%; margin-top: 18px; padding: 12px; }
+.status {
+  font-size: 12px; color: var(--muted); padding: 0 16px 10px;
+}
+.status.ok { color: var(--ok); }
+.status.err { color: var(--danger); }
+.status.warn { color: var(--warn); }
+.tabs { display: flex; gap: 6px; }
+.tabs button { padding: 8px 12px; font-size: 12px; }
+.hint {
+  margin-top: 12px; padding: 10px; border-radius: 8px;
+  background: #1a2433; color: var(--muted); font-size: 12px; line-height: 1.55;
+}
+@media (max-width: 900px) {
+  .wrap { grid-template-columns: 1fr; grid-template-rows: 40vh 1fr; }
+  .editor-wrap { grid-template-columns: 1fr; }
+  #preview { display: none; }
+  .editor-wrap.show-preview #preview { display: block; }
+  .editor-wrap.show-preview textarea#editor { display: none; }
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>FlyingRC® 说明书管理</h1>
+  <div class="meta" id="userMeta"></div>
+</header>
+
+<!-- Login -->
+<div id="loginView" class="login">
+  <h2>管理员登录</h2>
+  <p>使用 GitHub Personal Access Token 登录。Token 只保存在本机浏览器，不会上传到第三方。</p>
+  <label>仓库</label>
+  <input type="text" id="repoInput" value="Vulkanowrs/flyingrc-manuals" />
+  <label>GitHub Token（需 repo 权限）</label>
+  <input type="text" id="tokenInput" placeholder="ghp_..." autocomplete="off" />
+  <button onclick="login()">登录并加载文件</button>
+  <div id="loginStatus" class="status"></div>
+  <div class="hint">
+    创建 Token：https://github.com/settings/tokens/new<br/>
+    勾选 <b>repo</b>。保存后页面自动部署到 GitHub Pages（约 1–2 分钟）。<br/>
+    <b>仅管理员使用本页；请勿在公用电脑上保存 Token。</b>
+  </div>
+</div>
+
+<!-- App -->
+<div id="appView" class="wrap" style="display:none">
+  <aside class="side">
+    <div class="side-top">
+      <input type="text" id="filter" placeholder="筛选路径，如 shared/ 或 products/" oninput="renderFiles()" />
+      <div style="display:flex; gap:8px; margin-top:8px;">
+        <button class="secondary" style="flex:1" onclick="loadFiles()">刷新</button>
+        <button class="secondary" style="flex:1" onclick="logout()">退出</button>
+      </div>
+    </div>
+    <div class="file-list" id="fileList"></div>
+  </aside>
+  <section class="main">
+    <div class="toolbar">
+      <div class="path" id="currentPath">选择左侧文件开始编辑</div>
+      <div class="tabs">
+        <button class="secondary" id="tabEdit" onclick="setSplit(false)">仅编辑</button>
+        <button class="secondary" id="tabSplit" onclick="setSplit(true)">分栏预览</button>
+      </div>
+      <button class="secondary" onclick="discard()">放弃修改</button>
+      <button onclick="save()" id="saveBtn" disabled>保存并发布</button>
+    </div>
+    <div class="status" id="saveStatus"></div>
+    <div class="editor-wrap single" id="editorWrap">
+      <textarea id="editor" placeholder="加载文件后在此编辑 Markdown…"></textarea>
+      <div id="preview"></div>
+    </div>
+  </section>
+</div>
+
+<script>
+const LS_TOKEN = "flyingrc_gh_token";
+const LS_REPO = "flyingrc_gh_repo";
+const API = "https://api.github.com";
+
+let state = {
+  token: "",
+  repo: "Vulkanowrs/flyingrc-manuals",
+  owner: "Vulkanowrs",
+  name: "flyingrc-manuals",
+  files: [],
+  current: null,   // {path, sha, content, original}
+  user: null,
+};
+
+function $(id) { return document.getElementById(id); }
+
+function setStatus(el, msg, cls) {
+  el.textContent = msg || "";
+  el.className = "status" + (cls ? " " + cls : "");
+}
+
+function b64encode(str) {
+  const bytes = new TextEncoder().encode(str);
+  let bin = "";
+  bytes.forEach(b => bin += String.fromCharCode(b));
+  return btoa(bin);
+}
+function b64decode(b64) {
+  const bin = atob(b64.replace(/\n/g, ""));
+  const bytes = Uint8Array.from(bin, c => c.charCodeAt(0));
+  return new TextDecoder().decode(bytes);
+}
+
+async function gh(path, options = {}) {
+  const res = await fetch(API + path, {
+    ...options,
+    headers: {
+      Accept: "application/vnd.github+json",
+      Authorization: "Bearer " + state.token,
+      "X-GitHub-Api-Version": "2022-11-28",
+      ...(options.headers || {}),
+    },
+  });
+  if (res.status === 204) return null;
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    const msg = data.message || res.statusText;
+    const err = new Error(msg + (data.errors ? " · " + JSON.stringify(data.errors) : ""));
+    err.status = res.status;
+    throw err;
+  }
+  return data;
+}
+
+function parseRepo(repo) {
+  const [owner, name] = repo.split("/");
+  return { owner, name };
+}
+
+async function login() {
+  const token = $("tokenInput").value.trim();
+  const repo = $("repoInput").value.trim();
+  if (!token || !repo.includes("/")) {
+    setStatus($("loginStatus"), "请填写 Token 和 owner/repo", "err");
+    return;
+  }
+  state.token = token;
+  state.repo = repo;
+  const p = parseRepo(repo);
+  state.owner = p.owner;
+  state.name = p.name;
+  setStatus($("loginStatus"), "正在验证…");
+  try {
+    const me = await gh("/user");
+    state.user = me.login;
+    const r = await gh("/repos/" + state.owner + "/" + state.name);
+    if (r.private === true) {
+      // ok if token has access
+    }
+    localStorage.setItem(LS_TOKEN, token);
+    localStorage.setItem(LS_REPO, repo);
+    $("loginView").style.display = "none";
+    $("appView").style.display = "grid";
+    $("userMeta").textContent = me.login + " · " + repo;
+    await loadFiles();
+    setStatus($("loginStatus"), "");
+  } catch (e) {
+    setStatus($("loginStatus"), "登录失败：" + e.message, "err");
+  }
+}
+
+function logout() {
+  localStorage.removeItem(LS_TOKEN);
+  localStorage.removeItem(LS_REPO);
+  location.reload();
+}
+
+async function loadFiles() {
+  setStatus($("saveStatus"), "加载文件列表…", "warn");
+  try {
+    const ref = await gh("/repos/" + state.owner + "/" + state.name + "/git/ref/heads/main");
+    const sha = ref.object.sha;
+    const commit = await gh("/repos/" + state.owner + "/" + state.name + "/git/commits/" + sha);
+    const tree = await gh("/repos/" + state.owner + "/" + state.name + "/git/trees/" + commit.tree.sha + "?recursive=1");
+    state.files = (tree.tree || [])
+      .filter(t => t.type === "blob" && t.path.startsWith("docs/") && t.path.endsWith(".md"))
+      .map(t => t.path)
+      .sort();
+    state.branchSha = sha;
+    renderFiles();
+    setStatus($("saveStatus"), "共 " + state.files.length + " 个 Markdown 文件", "ok");
+  } catch (e) {
+    setStatus($("saveStatus"), "加载失败：" + e.message, "err");
+  }
+}
+
+function renderFiles() {
+  const q = ($("filter").value || "").toLowerCase();
+  const list = $("fileList");
+  list.innerHTML = "";
+  state.files
+    .filter(p => !q || p.toLowerCase().includes(q))
+    .forEach(p => {
+      const div = document.createElement("div");
+      div.className = "file-item" + (state.current && state.current.path === p ? " active" : "");
+      div.textContent = p.replace(/^docs\//, "");
+      div.onclick = () => openFile(p);
+      list.appendChild(div);
+    });
+}
+
+async function openFile(path) {
+  if (state.current && $("editor").value !== state.current.original) {
+    if (!confirm("当前文件有未保存修改，确定切换？")) return;
+  }
+  setStatus($("saveStatus"), "读取 " + path + " …", "warn");
+  try {
+    const data = await gh("/repos/" + state.owner + "/" + state.name + "/contents/" + path + "?ref=main");
+    const content = b64decode(data.content);
+    state.current = { path, sha: data.sha, content, original: content };
+    $("editor").value = content;
+    $("currentPath").textContent = path;
+    $("saveBtn").disabled = false;
+    renderPreview();
+    renderFiles();
+    setStatus($("saveStatus"), "已加载", "ok");
+  } catch (e) {
+    setStatus($("saveStatus"), "读取失败：" + e.message, "err");
+  }
+}
+
+function discard() {
+  if (!state.current) return;
+  $("editor").value = state.current.original;
+  renderPreview();
+  setStatus($("saveStatus"), "已恢复为上次保存内容", "warn");
+}
+
+// Minimal markdown preview (headings, tables, lists, code, bold, links, images, snippets notice)
+function escapeHtml(s) {
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+function renderPreview() {
+  const src = $("editor").value;
+  const el = $("preview");
+  // expand snippet placeholders as notice
+  let html = escapeHtml(src);
+  html = html.replace(/--8&lt;--\s+&quot;([^&]+)&quot;/g,
+    '<blockquote>（模块引用）已由构建系统插入：<code>$1</code></blockquote>');
+  // code blocks
+  html = html.replace(/```([\s\S]*?)```/g, "<pre>$1</pre>");
+  // headings
+  html = html.replace(/^### (.+)$/gm, "<h3>$1</h3>");
+  html = html.replace(/^## (.+)$/gm, "<h2>$1</h2>");
+  html = html.replace(/^# (.+)$/gm, "<h1>$1</h1>");
+  // bold / italic
+  html = html.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+  // images
+  html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img alt="$1" src="$2" />');
+  // links
+  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+  // blockquote
+  html = html.replace(/^&gt; (.+)$/gm, "<blockquote>$1</blockquote>");
+  // hr
+  html = html.replace(/^---$/gm, "<hr/>");
+  // lists
+  html = html.replace(/^(?:- |\* )(.+)$/gm, "<li>$1</li>");
+  html = html.replace(/(?:<li>.*<\/li>\n?)+/g, m => "<ul>" + m + "</ul>");
+  // tables (simple)
+  const lines = src.split(/\n/);
+  // fallback paragraphs for remaining lines
+  html = html.split("\n").map(line => {
+    const t = line.trim();
+    if (!t) return "";
+    if (/^<(h\d|ul|li|pre|blockquote|hr|img|table)/.test(t)) return line;
+    return "<p>" + line + "</p>";
+  }).join("\n");
+  el.innerHTML = html;
+}
+
+function setSplit(on) {
+  const w = $("editorWrap");
+  if (on) w.classList.remove("single"), w.classList.add("show-preview");
+  else w.classList.add("single"), w.classList.remove("show-preview");
+  $("tabSplit").style.background = on ? "var(--accent)" : "#243244";
+  $("tabEdit").style.background = !on ? "var(--accent)" : "#243244";
+  renderPreview();
+}
+
+async function save() {
+  if (!state.current) return;
+  const content = $("editor").value;
+  if (content === state.current.original) {
+    setStatus($("saveStatus"), "内容无变化", "warn");
+    return;
+  }
+  const msg = prompt("提交说明（写进 Git 记录）", "docs: update " + state.current.path.replace("docs/", ""));
+  if (msg === null) return;
+  $("saveBtn").disabled = true;
+  setStatus($("saveStatus"), "正在提交…", "warn");
+  try {
+    await gh("/repos/" + state.owner + "/" + state.name + "/contents/" + state.current.path, {
+      method: "PUT",
+      body: JSON.stringify({
+        message: msg,
+        content: b64encode(content),
+        sha: state.current.sha,
+        branch: "main",
+      }),
+    });
+    // refresh sha
+    const data = await gh("/repos/" + state.owner + "/" + state.name + "/contents/" + state.current.path + "?ref=main");
+    state.current = { path: state.current.path, sha: data.sha, content, original: content };
+    $("saveBtn").disabled = false;
+    setStatus($("saveStatus"), "已保存。GitHub Actions 正在构建发布，约 1–2 分钟后线上更新。", "ok");
+  } catch (e) {
+    $("saveBtn").disabled = false;
+    setStatus($("saveStatus"), "保存失败：" + e.message, "err");
+  }
+}
+
+// boot
+$("editor").addEventListener("input", renderPreview);
+(function boot() {
+  const t = localStorage.getItem(LS_TOKEN);
+  const r = localStorage.getItem(LS_REPO);
+  if (t && r) {
+    $("tokenInput").value = t;
+    $("repoInput").value = r;
+    login();
+  }
+  $("tabEdit").style.background = "var(--accent)";
+})();
+</script>
+</body>
+</html>
