@@ -37,6 +37,9 @@ FlyingRC® 全系列一览。
 | FlyingRC® 12S 440A 分电板 | [打开](products/pdb-12s-440a/index.md) |
 | FlyingRC® AM32 调参器 | [打开](products/am32-programmer/index.md) |
 
+
+> F4Wing Mini Pro 与 F435Wing Mini OSD 为同一产品，已合并为一册。
+
 ---
 
 --8<-- shared/other-products.md
