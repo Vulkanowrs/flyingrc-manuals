@@ -1,1 +1,46 @@
-[object Object]
+# 产品说明书包含哪些公共/系列章节（推荐默认）
+# 管理页可按产品勾选，会写入 docs/products/<slug>/index.md 的 --8<-- 引用
+# 也可用本文件做「标准模板」参考
+
+default_all_products:
+  - shared/safety.md
+  - shared/first-use-check.md
+  - shared/warranty.md
+  - shared/support.md
+  - shared/faq.md
+  - shared/brand-intro.md
+  - shared/other-products.md
+  - shared/disclaimer.md
+
+flight_controller_extra:
+  - shared/soldering.md
+  - shared/firmware-download.md
+  - shared/flight-controller/usb-driver.md
+  - shared/flight-controller/ardupilot-flashing.md
+  - shared/flight-controller/receiver-wiring.md
+
+esc_extra:
+  - shared/soldering.md
+  - shared/firmware-download.md
+  - shared/esc/am32-setup.md
+  - shared/esc/motor-direction.md
+
+products:
+  f4wse-pro:
+    category: flight-controller
+    includes:
+      - default_all_products
+      - flight_controller_extra
+      - shared/flight-controller/inav-flashing.md
+  f4wing-mini:
+    category: flight-controller
+    includes:
+      - default_all_products
+      - flight_controller_extra
+      - shared/flight-controller/inav-flashing.md
+      - shared/flight-controller/betaflight-flashing.md
+  am32-75a-v25:
+    category: esc
+    includes:
+      - default_all_products
+      - esc_extra
