@@ -355,13 +355,30 @@ def main():
             part = line_to_md(ln)
             if part:
                 md_parts.append(part)
-        body = "\n\n".join(md_parts)
+        body = join_table_rows(md_parts)
         body = rewrite_assets(body, mapping, slug)
         page = build_page(slug, cat, title if title.startswith("FlyingRC") else (name + " 产品手册"), body)
         out = ROOT / "docs" / "products" / slug / "index.md"
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_text(page, encoding="utf-8")
         print(f"PAGE {slug} assets={len(mapping)} md_len={len(page)}")
+
+
+def join_table_rows(md_parts):
+    """Join markdown fragments; keep consecutive table lines as one table (no blank lines)."""
+    out = []
+    for p in md_parts:
+        p = (p or "").strip("\n")
+        if not p:
+            continue
+        if p.startswith("|"):
+            if out and out[-1].startswith("|"):
+                out[-1] = out[-1] + "\n" + p
+            else:
+                out.append(p)
+        else:
+            out.append(p)
+    return "\n\n".join(out) + "\n"
 
 
 if __name__ == "__main__":

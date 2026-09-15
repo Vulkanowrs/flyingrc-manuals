@@ -57,37 +57,21 @@
 ![](../../assets/esc-4in1-75a/img11.jpeg)
 
 | 基础参数 | 电压-电流 |  |  |
-
 |------|------|------|------|
-
 | 型 号 | FlyingRC® 4IN1 75A ESC | VBAT供电范围 | 9-30V DC IN  3-7S LiPo |
-
 | 尺 寸 | 45mm*45.2mm*7.19mm | 单路持续电流 | 75A *45秒 (测试条件：4S) |
-
 | 安装孔位 | 30.5mm   M3 | 单路瞬间电流 | 85A (测试条件：4S) |
-
 | 质 量 | 18.6g | 电流计比例值 | 100 (1/10mV/A Betaflight) / 100 (A/V Ardupilot) |
-
 | 主要元件 | 固件 |  |  |
-
 | 主控芯片 | QF32F4AK8U7   32位 | AM32 | 支持 |
-
 | 主频 | 120MHz | 控制信号输入 | 支持DSHOT150、300、600，OneShot，PWM等多种协议 |
-
 | Flash | 64 KB | 工作环境 |  |
-
 | RAM | 16 KB | 工作温度范围 | -10-100℃ |
-
 | 栅极驱动器 | ID6288 | 存储温度范围 | 0-40℃ |
-
 | 场效应管/MOS | 英飞凌IRF7480 金封MOS |  |  |
-
 | 产品特点 |  |  |  |
-
 | 工艺 | PCB为10 层 2oz 黑色阻焊，过孔塞树脂，盘中孔，沉金，同类型产品中工艺最佳，为强大持续过流能力奠基 |  |  |
-
 | 贴片铜条 | 板载 4 根 2 种不同尺寸，镀金、镀镍防氧化；辅助 PCB 过流，对比无铜条设计，电阻减小至少 80%，因 PCB 电阻产生的发热降低 80% |  |  |
-
 | 金封MOS | 英飞凌 IRF7480，超低 Rdson 仅 0.95mΩ@10V ，1D 双面散热（Double - sided Cooling）330A ；对比未采用金封 MOS 的同类型电调，导通内阻明显降低、发热减小显著；金属外壳，MOS 管内部晶圆直触外壳，散热更好 |  |  |
 
 ![](../../assets/esc-4in1-75a/img12.jpeg)
@@ -129,23 +113,14 @@ V3.2                           V4.0
 电调SH1.0 8P接口
 
 | 引脚序号 | 引脚名称 | 引脚定义 |
-
 |------|------|------|
-
 | 1 | VBAT | 电池电压输入 |
-
 | 2 | G | GND （负极） |
-
 | 3 | M1 | 电调1 信号引脚 |
-
 | 4 | M2 | 电调2信号引脚 |
-
 | 5 | M3 | 电调3信号引脚 |
-
 | 6 | M4 | 电调4信号引脚 |
-
 | 7 | TX | 电调回传TX口 |
-
 | 8 | CURR | 模拟电流计输出信号引脚 |
 
 V3.2引脚定义表
@@ -157,23 +132,14 @@ V3.2引脚定义表
 电调SH1.0 8P接口
 
 | 引脚序号 | 引脚名称 | 引脚定义 |
-
 |------|------|------|
-
 | 1 | VBAT | 电池电压输入 |
-
 | 2 | G | GND （负极） |
-
 | 3 | CURR | 模拟电流计输出信号引脚 |
-
 | 4 | TX | 电调回传TX口 |
-
 | 5 | M1 | 电调1 信号引脚 |
-
 | 6 | M2 | 电调2信号引脚 |
-
 | 7 | M3 | 电调3信号引脚 |
-
 | 8 | M4 | 电调4信号引脚 |
 
 V4.0引脚定义表
@@ -363,41 +329,23 @@ KV值：需调整至电机KV值附近，与实际KV值偏差不超过30%。KV值
 因客户参数设置错误导致产品异常，工程师重新刷固件或校正参数的，将收取检测费 10–20 元。
 
 | 维修内容 | 项目编号 | 更换芯片型号 | 材料费+手工费=维修费 |
-
 |------|------|------|------|
-
 | 飞控主控 | 1 | STM32F405RGT6 | 30+15=45 |
-
 |  | 2 | STM32H743VIT6 | 50+30=80 |
-
 |  | 3 | STM32H743VIH6 | 65+45=110 |
-
 | 电调主控 | 4 | QF32F4AK8U7 | 8+10=18 |
-
 |  | 5 | AT32F421K8U7 | 6+10=16 |
-
 | 飞控传感器 | 6 | ICM-42688-P | 70+12=82 |
-
 |  | 7 | ICM-42605 | 50+12=62 |
-
 |  | 8 | SPL06 | 4+10=16 |
-
 |  | 9 | DPS310/DPS368 | 25+12=37 |
-
 | 飞控电源芯片 | 10 | MP9943 | 7+10=17 |
-
 |  | 11 | MP9447 | 10+10=20 |
-
 |  | 12 | MP9942 | 8+10=18 |
-
 |  | 13 | LM25148 | 26+15=41 |
-
 |  | 14 | LDO | 4+5=9 |
-
 | 电调场效应管 | 15 | IRF7480 | 5+5=10 |
-
 |  | 16 | HYG022N04LS1C1 | 3+5=8 |
-
 | 其它元器件 | 17 | 电阻、电容、插座等 | 2+5=7 |
 
 注：表格里是单一原件维修价格。
@@ -411,21 +359,13 @@ KV值：需调整至电机KV值附近，与实际KV值偏差不超过30%。KV值
 ![](../../assets/esc-4in1-75a/img36.jpeg)
 
 | 产品1.FlyingRC® F4WSE F405 Pro主控固定翼飞控            本店销量No.1 / 全新升级、功能更强 / FlyingRC官方零售价：140元 / 中文说明书   Product Manual   去淘宝购买 |  |
-
 |------|------|
-
 | 产品2.FlyingRC® F4WSE - F405主控固定翼飞控(停产) / 经典产品、设计独特、好评如潮 / 中文说明书  Product Manual |  |
-
 | 产品3.FlyingRC® H7Wlite H743主控固定翼飞控(停产) / 性能强劲，双陀螺仪 / FlyingRC官方零售价：299元 / 中文说明书  Product Manual |  |
-
 | 产品4.FlyingRC® H7Wlite Pro H743主控固定翼飞控         本店销量No.7 / 性能强劲，双陀螺仪,BEC输出能力强 / FlyingRC官方零售价：259元 / 中文说明书  Product Manual  去淘宝购买 |  |
-
 | 产品5.FlyingRC® F4Wing Mini F405主控固定翼飞控           本店销量No.2 / 2025年 爆款产品,设计感爆棚,全网最Mini / FlyingRC官方零售价：89元 / 中文说明书   Product Manual  去淘宝购买 |  |
-
 | 产品6.FlyingRC® H7D Pro H743主控穿越机飞控                 本店销量No.3 / 全新升级、功能更强 / FlyingRC官方零售价：269元/299元 / 中文说明书 Product Manual 去淘宝购买 |  |
-
 | 产品7.FlyingRC® H7D MK1 H743主控双陀螺仪穿越机飞控(停产) / 算力强大 飞行稳定精准 接口丰富 操控自如 / 中文说明书   Product Manual |  |
-
 | 产品8.FlyinRC® F4D MK1 F405主控 20\30.5孔距 穿越机飞控    本店销量No.9 / 算力强大 飞行稳定精准 接口丰富 操控自如 / FlyingRC官方零售价：129元 / 中文说明书   Product Manual  去淘宝购买 |  |
 
 电调类
@@ -433,17 +373,11 @@ KV值：需调整至电机KV值附近，与实际KV值偏差不超过30%。KV值
 ![](../../assets/esc-4in1-75a/img37.jpeg)
 
 | 产品9.FlyingRC® 4IN1 75A ESC 四合一穿越机金封电调 / 本店销量No.4 / 高端产品,英飞凌金封MOS,工艺最佳,单路持续75AFlyingRC官方零售价：269元 / 中文说明书 Product Manual 去淘宝购买 |  |
-
 |------|------|
-
 | 产品10.FlyingRC® 4IN1 45A ESC  四合一穿越机电调 / 性能出色，性价比高，入门首选 / FlyingRC官方零售价：149元 / 中文说明书 Product Manual  去淘宝购买 |  |
-
 | 产品11.FlyingRC® AM32 Dual ESC 40A 二合一电调                本店销量No.12 / 设计独特，独家产品 用于无人机等空中、陆地、水上双动力设备    FlyingRC官方零售价：89元 / 中文说明书 Product Manual 去淘宝购买 |  |
-
 | 产品12.FlyingRC® AM32 ESC 75A V2.5单体金封电调                 本店销量No.6 / 英飞凌金封MOS 工艺出色 过流能力强大 / FlyingRC官方零售价：87元（不带BEC版本） / 中文说明书 Product Manual 去淘宝购买 |  |
-
 | 产品13.FlyingRC® AM32 ESC单体金封电调控制板(带BEC) / 客户可以用自己的功率板，制作不同规格电调 / FlyingRC官方零售价：47元 / 中文说明书 Product Manual 去淘宝购买 |  |
-
 | 产品14.FlyingRC® AM32 Mini ESC 40A V1单体电调           本店销量No.10 / 超Mini 用于小型和微型机 过流能力强 运行稳定 FlyingRC官方零售价：43元 / 中文说明书 Product Manual 去淘宝购买 |  |
 
 飞塔类
@@ -451,15 +385,10 @@ KV值：需调整至电机KV值附近，与实际KV值偏差不超过30%。KV值
 ![](../../assets/esc-4in1-75a/img38.jpeg)
 
 | 产品15.FlyingRC® 高阶版飞塔套装 / H743穿越机飞控+四合一穿越机75A金封电调 / 专业飞行首选，旗舰用料工艺，良心价格 / FlyingRC官方零售价：528元 / 飞控中文说明书   电调中文说明书 / FC Product Manual  ESC Product Manual / 去淘宝购买 |  |
-
 |------|------|
-
 | 产品16.FlyingRC® 进阶版飞塔套装 / F405穿越机飞控+四合一穿越机75A金封电调 / 爆款组合，性能出色，良心价格 / FlyingRC官方零售价：398元 / 飞控中文说明书    电调中文说明书 / FC Product Manual ESC Product Manual / 去淘宝购买 |  |
-
 | 产品17.FlyingRC® 进阶版飞塔套装 / H743穿越机飞控+四合一穿越机45A电调 / 爆款组合，性能出色，价格亲民 / FlyingRC官方零售价：408元 / 飞控中文说明书     电调中文说明书 / FC Product Manual  ESC Product Manual / 去淘宝购买 |  |
-
 | 产品18.FlyingRC® 基础版飞塔套装 / F405穿越机飞控+四合一穿越机45A电调 / 爆款组合，实惠之选，价格亲民 / FlyingRC官方零售价：278元 / 飞控中文说明书     电调中文说明书 / FC Product Manual  ESC Product Manual / 去淘宝购买 |  |
-
 | 产品19.FlyingRC® 固定翼飞塔套装 / F4WSE PRO飞控+二合一40A电调 / 独特设计、独家产品、爆款组合 / FlyingRC官方零售价：237元 / 飞控中文说明书      电调中文说明书 / FC Product Manual   ESC Product Manual / 去淘宝购买 |  |
 
 BEC 降压电路类
@@ -467,21 +396,15 @@ BEC 降压电路类
 ![](../../assets/esc-4in1-75a/img39.jpeg)
 
 | 产品20.FlyingRC® 10A 12S BEC降压模块 / 多电压可选 行业首选，物美价廉 / FlyingRC官方零售价：74元 / 中文说明书 Product Manual 去淘宝购买 |  |
-
 |------|------|
-
 | 产品21.FlyingRC® 10A 8S BEC降压模块 / 多电压可选 行业首选，物美价廉 / FlyingRC官方零售价：36元 / 中文说明书 Product Manual 去淘宝购买 |  |
-
 | 产品22.FlyingRC® 5A 6S BEC降压模块  本店销量No.5 / 多电压可选，持续5A输出 / FlyingRC官方零售价：17元 / 中文说明书  Product Manual  去淘宝购买 |  |
-
 | 产品23.FlyingRC® Mini BEC For DJI O4 / 独立降压，稳定供电，让飞行更安全 / FlyingRC官方零售价：18元 / 中文说明书  Product Manual  去淘宝购买 |  |
 
 模块类
 
 | 产品24.FlyingRC® RM3100 SPI Module 罗盘模块 / 超高分辨率、低功耗、行业首选 / FlyingRC官方零售价：129元 / 中文说明书  Product Manual  去淘宝购买 |  |
-
 |------|------|
-
 | 产品25.FlyingRC® L4CAN RM3100 CAN总线罗盘模块 / 行业首选，物美价廉 / FlyingRC官方零售价：199元 / 中文说明书 Product Manual 去淘宝购买 |  |
 
 其他类
@@ -489,27 +412,18 @@ BEC 降压电路类
 ![](../../assets/esc-4in1-75a/img40.jpeg)
 
 | 产品26.FlyingRC® 10A 12S 400A穿越机分电板                      本店销量No.8 / 行业首选，物美价廉 / FlyingRC官方零售价：109元 / 中文说明书  Product Manual 去淘宝购买 |  |
-
 |------|------|
-
 | 产品27.FlyingRC®  ELRS 2.4G 分集ELIS接收机                 本店销量No.11 / 真分集接收,温度补偿，高功率接收 / FlyingRC官方零售价：109元 / 中文说明书  Product Manual  去淘宝购买 |  |
-
 | 产品28.FlyingRC®  AM32电调调参器 / 支持BL，BL32，AM32 简单好用 / FlyingRC官方零售价：9.9元/7.9元（A口/C口）焊好 / FlyingRC官方零售价：6.9元/5.9元（A口/C口）自己焊 / 中文说明书 Product Manual 去淘宝购买 |  |
-
 | 产品29.FlyingRC® I2C无空速管数字新款空速计 / 一体设计，全网最Mini MS4525D协议，I2C接口 / FlyingRC官方零售价：95元 / 中文说明书  Product Manual  去淘宝购买 |  |
-
 | 产品30.FlyingRC® 无空速管数字空速计 / 一体设计，全网最Mini MS4525D协议，I2C接口 / FlyingRC官方零售价：    95元 / 中文说明书  Product Manual  去淘宝购买 |  |
-
 | 产品31.FlyingRC® I2C 外置电流计 / 一体设计，全网最Mini MS4525D协议，I2C接口 / FlyingRC官方零售价：39元 / 中文说明书  Product Manual  去淘宝购买 |  |
-
 | 产品32.FlyingRC® L4 CAN RC/GPS Adapter  CAN总线串口&PWM扩展板 / 长距离传输，高速率，稳定性强 / FlyingRC官方零售价：46元 / 中文说明书  Product Manual  去淘宝购买 |  |
-
 | 产品33.FlyingRC® U-Blox M10 GPS / 支持各种开源飞控 多尺寸可选 搜星能力强 性价高 / FlyingRC官方零售价：68元(18*18mm款) / 中文说明书  Product Manual  去淘宝购买 |  |
 
 ![](../../assets/esc-4in1-75a/img41.png)
 
 | FlyingRC®官网 / www.FlyingRC®.cn | 淘宝店铺 | 闲鱼店铺 | 群号1016199449 |
-
 |------|------|------|------|
 
 电话:021-58204886 手机:13122492475   微信:13122492475、18019464804
