@@ -8,68 +8,78 @@
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <style>
 :root{
-  --bg:#f4f6f9; --panel:#fff; --line:#e2e8f0; --text:#1e293b; --muted:#64748b;
-  --brand:#0f766e; --brand-soft:#ccfbf1; --blue:#2563eb; --red:#dc2626; --ok:#16a34a;
-  --shadow:0 8px 24px rgba(15,23,42,.06);
+  --bg:#f1f5f9; --panel:#ffffff; --line:#cbd5e1; --text:#0f172a; --muted:#475569;
+  --brand:#0f766e; --brand-soft:#ccfbf1; --blue:#1d4ed8; --red:#b91c1c; --ok:#15803d;
+  --shadow:0 12px 32px rgba(15,23,42,.14);
 }
 *{box-sizing:border-box}
+html{color-scheme:light}
 body{margin:0;font-family:"PingFang SC","Microsoft YaHei",system-ui,sans-serif;background:var(--bg);color:var(--text)}
 header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 18px;background:var(--panel);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
-header h1{margin:0;font-size:17px}
+header h1{margin:0;font-size:17px;color:var(--text)}
 .tag{font-size:12px;color:var(--muted)}
 .app{display:grid;grid-template-columns:300px 1fr;height:calc(100vh - 56px)}
 .side{background:var(--panel);border-right:1px solid var(--line);display:flex;flex-direction:column;min-height:0}
 .side .pad{padding:12px;display:grid;gap:8px}
-.side .pad input,.side .pad select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font-size:13px;background:#fff}
+.side .pad input,.side .pad select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font-size:13px;background:#fff;color:var(--text)}
 .list{overflow:auto;flex:1;padding:0 8px 12px}
-.group{font-size:12px;color:var(--muted);padding:10px 8px 4px;font-weight:600}
-.item{padding:9px 10px;border-radius:10px;cursor:pointer;font-size:13px;line-height:1.35;margin:2px 0}
-.item:hover{background:#f1f5f9}
-.item.active{background:var(--brand-soft);color:var(--brand);font-weight:600}
+.group{font-size:12px;color:var(--muted);padding:12px 8px 6px;font-weight:700;letter-spacing:.02em}
+.item{padding:9px 10px;border-radius:10px;cursor:pointer;font-size:13px;line-height:1.35;margin:2px 0;color:var(--text)}
+.item:hover{background:#e2e8f0}
+.item.active{background:var(--brand-soft);color:#115e59;font-weight:600}
 .item small{display:block;color:var(--muted);font-size:11px;font-weight:400}
 .main{display:flex;flex-direction:column;min-height:0}
 .bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:10px 14px;background:var(--panel);border-bottom:1px solid var(--line)}
 .path{flex:1;min-width:140px;font-size:13px;color:var(--muted);word-break:break-all}
 .btn{border:0;border-radius:10px;padding:9px 14px;font-size:13px;cursor:pointer;background:#e2e8f0;color:var(--text)}
 .btn.primary{background:var(--brand);color:#fff;font-weight:600}
-.btn.blue{background:var(--blue);color:#fff}
-.btn.ghost{background:transparent;border:1px solid var(--line)}
+.btn.blue{background:var(--blue);color:#fff;font-weight:600}
+.btn.ghost{background:#fff;color:var(--text);border:1px solid #94a3b8}
 .btn:disabled{opacity:.45;cursor:not-allowed}
 .tools{display:flex;flex-wrap:wrap;gap:6px;padding:8px 14px;background:#f8fafc;border-bottom:1px solid var(--line)}
-.tools button{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 10px;font-size:12px;cursor:pointer}
-.tools button:hover{border-color:var(--brand);color:var(--brand)}
-.status{padding:8px 14px;font-size:12px;min-height:28px;color:var(--muted)}
-.status.ok{color:var(--ok)} .status.err{color:var(--red)} .status.warn{color:#b45309}
+.tools button{border:1px solid #94a3b8;background:#fff;border-radius:8px;padding:6px 10px;font-size:12px;cursor:pointer;color:var(--text)}
+.tools button:hover{border-color:var(--brand);color:var(--brand);background:#f0fdfa}
+.status{padding:8px 14px;font-size:13px;min-height:30px;color:var(--muted)}
+.status.ok{color:var(--ok);font-weight:600} .status.err{color:var(--red);font-weight:600} .status.warn{color:#92400e;font-weight:600}
 .edit{flex:1;display:grid;grid-template-columns:1.1fr .9fr;min-height:0}
 .edit.single{grid-template-columns:1fr}
-textarea{width:100%;height:100%;border:0;resize:none;padding:16px;font:14px/1.7 "Cascadia Code",Consolas,"PingFang SC",monospace;outline:none;background:#fff}
-#preview{overflow:auto;padding:18px 22px;border-left:1px solid var(--line);background:#fbfdff;font-size:15px;line-height:1.75}
-#preview h1,#preview h2{border-bottom:1px solid var(--line);padding-bottom:8px}
+textarea{width:100%;height:100%;border:0;resize:none;padding:16px;font:14px/1.7 "Cascadia Code",Consolas,"PingFang SC",monospace;outline:none;background:#fff;color:var(--text)}
+#preview{overflow:auto;padding:18px 22px;border-left:1px solid var(--line);background:#fbfdff;font-size:15px;line-height:1.75;color:var(--text)}
+#preview h1,#preview h2{border-bottom:1px solid var(--line);padding-bottom:8px;color:var(--text)}
 #preview table{border-collapse:collapse;width:100%;font-size:13px;margin:12px 0}
-#preview th,#preview td{border:1px solid var(--line);padding:8px 10px}
-#preview th{background:#f1f5f9}
+#preview th,#preview td{border:1px solid var(--line);padding:8px 10px;color:var(--text)}
+#preview th{background:#e2e8f0}
 #preview img{max-width:100%;border-radius:8px;background:#f1f5f9}
-#preview code{background:#f1f5f9;padding:1px 6px;border-radius:6px}
-#preview pre{background:#0f172a;color:#e2e8f0;padding:12px;border-radius:10px;overflow:auto}
+#preview code{background:#e2e8f0;padding:1px 6px;border-radius:6px}
+#preview pre{background:#0f172a;color:#f1f5f9;padding:12px;border-radius:10px;overflow:auto}
 #preview blockquote{border-left:4px solid var(--brand);margin:0;padding:6px 12px;color:var(--muted);background:#f8fafc}
-#preview .snip{background:#fff7ed;border:1px dashed #fdba74;color:#9a3412;padding:10px 12px;border-radius:10px;font-size:13px}
+#preview .snip{background:#ffedd5;border:1px dashed #c2410c;color:#7c2d12;padding:10px 12px;border-radius:10px;font-size:13px}
 .login{max-width:520px;margin:6vh auto;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:var(--shadow)}
-.login h2{margin:0 0 6px}
+.login h2{margin:0 0 6px;color:var(--text)}
 .login .desc{color:var(--muted);font-size:13px;line-height:1.6;margin-bottom:8px}
 .tabs{display:flex;gap:8px;margin:16px 0}
-.tabs button{flex:1;padding:10px;border-radius:10px;border:1px solid var(--line);background:#fff;cursor:pointer}
-.tabs button.on{background:var(--brand);color:#fff;border-color:var(--brand)}
-label{display:block;font-size:12px;color:var(--muted);margin:12px 0 6px}
-input[type=text],input[type=password],input[type=file]{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;font-size:14px}
+.tabs button{flex:1;padding:10px;border-radius:10px;border:1px solid #94a3b8;background:#fff;cursor:pointer;color:var(--text);font-size:13px}
+.tabs button.on{background:var(--brand);color:#fff;border-color:var(--brand);font-weight:600}
+label{display:block;font-size:13px;color:var(--text);margin:12px 0 6px;font-weight:600}
+input[type=text],input[type=password],input[type=file]{width:100%;padding:11px 12px;border:1px solid #94a3b8;border-radius:10px;font-size:14px;background:#fff;color:var(--text)}
+input::placeholder,textarea::placeholder{color:#94a3b8}
 .login .go{width:100%;margin-top:18px;padding:12px;font-size:15px}
-.steps{background:#f8fafc;border-radius:12px;padding:12px 14px;margin-top:16px;font-size:12px;line-height:1.7;color:var(--muted)}
+.steps{background:#e2e8f0;border-radius:12px;padding:12px 14px;margin-top:16px;font-size:13px;line-height:1.7;color:var(--text)}
 .steps ol{margin:6px 0 0;padding-left:18px}
-.modal{position:fixed;inset:0;background:rgba(15,23,42,.45);display:none;align-items:center;justify-content:center;z-index:50;padding:16px}
+.modal{position:fixed;inset:0;background:rgba(15,23,42,.55);display:none;align-items:center;justify-content:center;z-index:50;padding:16px}
 .modal.on{display:flex}
-.card{background:#fff;border-radius:14px;padding:20px;width:min(520px,100%);max-height:90vh;overflow:auto}
-.card h3{margin:0 0 10px}
-.row{display:flex;gap:8px;margin-top:14px}
-.row .btn{flex:1}
+.card{background:#ffffff;border-radius:14px;padding:24px;width:min(520px,100%);max-height:90vh;overflow:auto;color:var(--text);border:1px solid #94a3b8;box-shadow:var(--shadow)}
+.card h3{margin:0 0 10px;color:var(--text);font-size:18px}
+.card p,.card small{color:var(--muted)}
+.card input[type=text]{border:1px solid #64748b}
+.row{display:flex;gap:8px;margin-top:16px}
+.row .btn{flex:1;padding:11px 14px;font-size:14px}
+.mod-row{display:flex;gap:10px;align-items:flex-start;margin:6px 4px;padding:10px 12px;border-radius:10px;background:#f8fafc;border:1px solid #e2e8f0;cursor:pointer;font-size:14px;color:var(--text)}
+.mod-row:hover{background:#e2e8f0}
+.mod-row input[type=checkbox]{width:18px;height:18px;margin-top:2px;accent-color:var(--brand)}
+.mod-row b{color:var(--text);font-size:14px}
+.mod-row small{color:var(--muted);font-size:12px}
+.mod-head{font-size:13px;font-weight:700;color:var(--text);margin:14px 4px 6px}
 @media(max-width:960px){
   .app{grid-template-columns:1fr;grid-template-rows:35vh 1fr}
   .edit{grid-template-columns:1fr}
@@ -180,13 +190,26 @@ input[type=text],input[type=password],input[type=file]{width:100%;padding:11px 1
 <div class="modal" id="modModal">
   <div class="card" style="width:min(640px,100%)">
     <h3 id="modTitle">产品包含哪些说明书章节</h3>
-    <p style="font-size:12px;color:var(--muted);margin:0 0 12px;line-height:1.6">
+    <p style="font-size:13px;color:var(--muted);margin:0 0 12px;line-height:1.6">
       勾选 = 本产品说明书会插入该公共/系列章节。改公共章节内容仍只改一处，多产品同步。
     </p>
-    <div id="modList" style="max-height:55vh;overflow:auto;border:1px solid var(--line);border-radius:10px;padding:8px"></div>
+    <div id="modList" style="max-height:55vh;overflow:auto;border:1px solid var(--line);border-radius:10px;padding:8px;background:#fff"></div>
     <div class="row">
       <button class="btn ghost" onclick="closeModModal()">取消</button>
       <button class="btn primary" onclick="applyModuleConfig()">应用到编辑器（需再点保存）</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="saveModal">
+  <div class="card">
+    <h3>保存并发布</h3>
+    <p style="font-size:13px;color:var(--muted);margin:0 0 4px;line-height:1.6">这次改了什么？（会记入版本历史）</p>
+    <label for="saveMsg">提交说明</label>
+    <input type="text" id="saveMsg" placeholder="例如：更新售后电话" />
+    <div class="row">
+      <button class="btn ghost" onclick="closeSaveModal()">取消</button>
+      <button class="btn primary" onclick="confirmSave()">确认保存</button>
     </div>
   </div>
 </div>
@@ -484,14 +507,14 @@ function openModuleConfig(){
     const items = mods.filter(p=>g.test(p) && !used[p]);
     if(!items.length) return;
     const h=document.createElement("div");
-    h.style.cssText="font-size:12px;font-weight:600;color:var(--muted);margin:10px 6px 6px";
+    h.className="mod-head";
     h.textContent=g.title;
     box.appendChild(h);
     items.forEach(p=>{
       used[p]=true;
       const row=document.createElement("label");
-      row.style.cssText="display:flex;gap:8px;align-items:flex-start;margin:4px 6px;font-size:13px;color:var(--text);cursor:pointer";
-      row.innerHTML = "<input type='checkbox' data-mod='"+p+"' "+(inc[p]?"checked":"")+" /> <span><b>"+(MODULE_TITLES[p]||p)+"</b><br><small style='color:var(--muted)'>"+p+"</small></span>";
+      row.className="mod-row";
+      row.innerHTML = "<input type='checkbox' data-mod='"+p+"' "+(inc[p]?"checked":"")+" /> <span><b>"+(MODULE_TITLES[p]||p)+"</b><br><small>"+p+"</small></span>";
       box.appendChild(row);
     });
   });
@@ -615,8 +638,15 @@ async function save(){
   if(!S.cur) return;
   const content=$("editor").value;
   if(content===S.cur.original){ st($("saveStatus"),"内容没有变化","warn"); return; }
-  const msg=prompt("这次改了什么？（会记入版本历史）","docs: 更新说明书内容");
-  if(msg===null) return;
+  $("saveMsg").value = "docs: 更新 " + S.cur.path.replace("docs/","");
+  $("saveModal").classList.add("on");
+  setTimeout(()=>{ $("saveMsg").focus(); $("saveMsg").select(); }, 50);
+}
+function closeSaveModal(){ $("saveModal").classList.remove("on"); }
+async function confirmSave(){
+  const msg = ($("saveMsg").value||"").trim() || "docs: 更新说明书内容";
+  closeSaveModal();
+  const content=$("editor").value;
   $("saveBtn").disabled=true; st($("saveStatus"),"正在保存…","warn");
   try{
     if(S.mode==="token"){
@@ -669,6 +699,9 @@ async function createFile(){
 }
 
 $("editor").addEventListener("input",renderPreview);
+$("saveMsg") && $("saveMsg").addEventListener("keydown", e=>{ if(e.key==="Enter") confirmSave(); });
+$("teamPass") && $("teamPass").addEventListener("keydown", e=>{ if(e.key==="Enter") login(); });
+$("tokenInput") && $("tokenInput").addEventListener("keydown", e=>{ if(e.key==="Enter") login(); });
 (function boot(){
   const m=localStorage.getItem(LS.m)||"worker";
   setMode(m);
