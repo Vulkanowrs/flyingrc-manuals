@@ -1,1 +1,685 @@
-[object Object]
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex" />
+<title>FlyingRC 说明书编辑</title>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<style>
+:root{
+  --bg:#f4f6f9; --panel:#fff; --line:#e2e8f0; --text:#1e293b; --muted:#64748b;
+  --brand:#0f766e; --brand-soft:#ccfbf1; --blue:#2563eb; --red:#dc2626; --ok:#16a34a;
+  --shadow:0 8px 24px rgba(15,23,42,.06);
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:"PingFang SC","Microsoft YaHei",system-ui,sans-serif;background:var(--bg);color:var(--text)}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 18px;background:var(--panel);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
+header h1{margin:0;font-size:17px}
+.tag{font-size:12px;color:var(--muted)}
+.app{display:grid;grid-template-columns:300px 1fr;height:calc(100vh - 56px)}
+.side{background:var(--panel);border-right:1px solid var(--line);display:flex;flex-direction:column;min-height:0}
+.side .pad{padding:12px;display:grid;gap:8px}
+.side .pad input,.side .pad select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font-size:13px;background:#fff}
+.list{overflow:auto;flex:1;padding:0 8px 12px}
+.group{font-size:12px;color:var(--muted);padding:10px 8px 4px;font-weight:600}
+.item{padding:9px 10px;border-radius:10px;cursor:pointer;font-size:13px;line-height:1.35;margin:2px 0}
+.item:hover{background:#f1f5f9}
+.item.active{background:var(--brand-soft);color:var(--brand);font-weight:600}
+.item small{display:block;color:var(--muted);font-size:11px;font-weight:400}
+.main{display:flex;flex-direction:column;min-height:0}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:10px 14px;background:var(--panel);border-bottom:1px solid var(--line)}
+.path{flex:1;min-width:140px;font-size:13px;color:var(--muted);word-break:break-all}
+.btn{border:0;border-radius:10px;padding:9px 14px;font-size:13px;cursor:pointer;background:#e2e8f0;color:var(--text)}
+.btn.primary{background:var(--brand);color:#fff;font-weight:600}
+.btn.blue{background:var(--blue);color:#fff}
+.btn.ghost{background:transparent;border:1px solid var(--line)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.tools{display:flex;flex-wrap:wrap;gap:6px;padding:8px 14px;background:#f8fafc;border-bottom:1px solid var(--line)}
+.tools button{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 10px;font-size:12px;cursor:pointer}
+.tools button:hover{border-color:var(--brand);color:var(--brand)}
+.status{padding:8px 14px;font-size:12px;min-height:28px;color:var(--muted)}
+.status.ok{color:var(--ok)} .status.err{color:var(--red)} .status.warn{color:#b45309}
+.edit{flex:1;display:grid;grid-template-columns:1.1fr .9fr;min-height:0}
+.edit.single{grid-template-columns:1fr}
+textarea{width:100%;height:100%;border:0;resize:none;padding:16px;font:14px/1.7 "Cascadia Code",Consolas,"PingFang SC",monospace;outline:none;background:#fff}
+#preview{overflow:auto;padding:18px 22px;border-left:1px solid var(--line);background:#fbfdff;font-size:15px;line-height:1.75}
+#preview h1,#preview h2{border-bottom:1px solid var(--line);padding-bottom:8px}
+#preview table{border-collapse:collapse;width:100%;font-size:13px;margin:12px 0}
+#preview th,#preview td{border:1px solid var(--line);padding:8px 10px}
+#preview th{background:#f1f5f9}
+#preview img{max-width:100%;border-radius:8px;background:#f1f5f9}
+#preview code{background:#f1f5f9;padding:1px 6px;border-radius:6px}
+#preview pre{background:#0f172a;color:#e2e8f0;padding:12px;border-radius:10px;overflow:auto}
+#preview blockquote{border-left:4px solid var(--brand);margin:0;padding:6px 12px;color:var(--muted);background:#f8fafc}
+#preview .snip{background:#fff7ed;border:1px dashed #fdba74;color:#9a3412;padding:10px 12px;border-radius:10px;font-size:13px}
+.login{max-width:520px;margin:6vh auto;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:var(--shadow)}
+.login h2{margin:0 0 6px}
+.login .desc{color:var(--muted);font-size:13px;line-height:1.6;margin-bottom:8px}
+.tabs{display:flex;gap:8px;margin:16px 0}
+.tabs button{flex:1;padding:10px;border-radius:10px;border:1px solid var(--line);background:#fff;cursor:pointer}
+.tabs button.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+label{display:block;font-size:12px;color:var(--muted);margin:12px 0 6px}
+input[type=text],input[type=password],input[type=file]{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;font-size:14px}
+.login .go{width:100%;margin-top:18px;padding:12px;font-size:15px}
+.steps{background:#f8fafc;border-radius:12px;padding:12px 14px;margin-top:16px;font-size:12px;line-height:1.7;color:var(--muted)}
+.steps ol{margin:6px 0 0;padding-left:18px}
+.modal{position:fixed;inset:0;background:rgba(15,23,42,.45);display:none;align-items:center;justify-content:center;z-index:50;padding:16px}
+.modal.on{display:flex}
+.card{background:#fff;border-radius:14px;padding:20px;width:min(520px,100%);max-height:90vh;overflow:auto}
+.card h3{margin:0 0 10px}
+.row{display:flex;gap:8px;margin-top:14px}
+.row .btn{flex:1}
+@media(max-width:960px){
+  .app{grid-template-columns:1fr;grid-template-rows:35vh 1fr}
+  .edit{grid-template-columns:1fr}
+  #preview{display:none}
+  .edit.showprev #preview{display:block}
+  .edit.showprev textarea{display:none}
+}
+</style>
+</head>
+<body>
+
+<div id="loginView">
+  <div class="login">
+    <h2>FlyingRC® 说明书编辑</h2>
+    <p class="desc">给文案 / 客服 / 运营使用。选一种登录方式后，即可在浏览器里改说明书并发布到官网。</p>
+    <div class="tabs">
+      <button class="on" id="tabWorker" onclick="setMode('worker')">团队密码（推荐）</button>
+      <button id="tabToken" onclick="setMode('token')">GitHub Token</button>
+    </div>
+    <div id="modeWorker">
+      <label>管理服务地址（Worker URL）</label>
+      <input type="text" id="workerUrl" placeholder="https://xxxx.workers.dev" />
+      <label>团队密码</label>
+      <input type="password" id="teamPass" placeholder="由管理员提供" />
+      <div class="steps">
+        <b>若还没有 Worker：</b>请管理员按仓库内 <code>worker/index.js</code> 说明部署一次（约 10 分钟）。之后其他同事只需填地址 + 密码。
+      </div>
+    </div>
+    <div id="modeToken" style="display:none">
+      <label>仓库</label>
+      <input type="text" id="repoInput" value="Vulkanowrs/flyingrc-manuals" />
+      <label>GitHub Token</label>
+      <input type="text" id="tokenInput" placeholder="ghp_..." />
+      <div class="steps">
+        <b>给技术同事：</b>
+        <ol>
+          <li>打开 github.com/settings/tokens/new</li>
+          <li>勾选 <b>repo</b>，生成并复制</li>
+          <li>粘贴到上面，点登录</li>
+        </ol>
+      </div>
+    </div>
+    <button class="btn primary go" onclick="login()">登录</button>
+    <div class="status" id="loginStatus"></div>
+  </div>
+</div>
+
+<div id="appView" class="app" style="display:none">
+  <aside class="side">
+    <div class="pad" style="padding-bottom:4px">
+      <div style="font-size:12px;color:var(--muted)" id="userMeta">已登录</div>
+    </div>
+    <div class="pad">
+      <input type="text" id="filter" placeholder="搜索文件，例如 warranty / f4wse" oninput="renderList()" />
+      <div style="display:flex;gap:8px">
+        <button class="btn ghost" style="flex:1" onclick="loadFiles()">刷新</button>
+        <button class="btn ghost" style="flex:1" onclick="openNew()">新建页</button>
+        <button class="btn ghost" style="flex:1" onclick="logout()">退出</button>
+      </div>
+    </div>
+    <div class="list" id="fileList"></div>
+  </aside>
+  <section class="main">
+    <div class="bar">
+      <div class="path" id="curPath">先在左侧选择要修改的说明书文件</div>
+      <button class="btn ghost" onclick="togglePrev()">预览开关</button>
+      <button class="btn ghost" onclick="discard()">撤销改动</button>
+      <button class="btn ghost" id="modBtn" onclick="openModuleConfig()" disabled>产品模块</button>
+      <button class="btn blue" onclick="uploadImage()">上传图片</button>
+      <button class="btn primary" id="saveBtn" onclick="save()" disabled>保存并发布</button>
+    </div>
+    <div class="tools" id="tools">
+      <button onclick="wrap('**','**')">加粗</button>
+      <button onclick="prefix('# ')">标题1</button>
+      <button onclick="prefix('## ')">标题2</button>
+      <button onclick="prefix('### ')">标题3</button>
+      <button onclick="prefix('- ')">列表</button>
+      <button onclick="insertTable()">表格</button>
+      <button onclick="insertAdm()">提示框</button>
+      <button onclick="insertSnippet()">公共模块引用</button>
+      <button onclick="insertImage()">插入图片链接</button>
+      <button onclick="insertLink()">超链接</button>
+    </div>
+    <div class="status" id="saveStatus"></div>
+    <div class="edit" id="editWrap">
+      <textarea id="editor" placeholder="选择左侧文件后，在这里直接改文字。常用格式用上方按钮，改完点「保存并发布」。"></textarea>
+      <div id="preview"></div>
+    </div>
+  </section>
+</div>
+
+<input type="file" id="fileInput" accept="image/*" style="display:none" onchange="doUploadImage(event)" />
+
+<div class="modal" id="modal">
+  <div class="card">
+    <h3 id="modalTitle">新建说明页</h3>
+    <label>文件路径（相对 docs/）</label>
+    <input type="text" id="newPath" placeholder="例如 products/new-product/index.md" />
+    <label>标题</label>
+    <input type="text" id="newTitle" placeholder="例如 FlyingRC® 某产品说明书" />
+    <div class="row">
+      <button class="btn ghost" onclick="closeModal()">取消</button>
+      <button class="btn primary" onclick="createFile()">创建并打开</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="modModal">
+  <div class="card" style="width:min(640px,100%)">
+    <h3 id="modTitle">产品包含哪些说明书章节</h3>
+    <p style="font-size:12px;color:var(--muted);margin:0 0 12px;line-height:1.6">
+      勾选 = 本产品说明书会插入该公共/系列章节。改公共章节内容仍只改一处，多产品同步。
+    </p>
+    <div id="modList" style="max-height:55vh;overflow:auto;border:1px solid var(--line);border-radius:10px;padding:8px"></div>
+    <div class="row">
+      <button class="btn ghost" onclick="closeModModal()">取消</button>
+      <button class="btn primary" onclick="applyModuleConfig()">应用到编辑器（需再点保存）</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const LS = { w:"frc_worker", p:"frc_pass", t:"frc_token", r:"frc_repo", m:"frc_mode" };
+let S = {
+  mode:"worker", worker:"", pass:"", token:"", repo:"Vulkanowrs/flyingrc-manuals",
+  owner:"Vulkanowrs", name:"flyingrc-manuals",
+  files:[], cur:null, user:"", rawBase:""
+};
+function $(id){return document.getElementById(id)}
+function st(el,msg,cls){el.textContent=msg||"";el.className="status"+(cls?" "+cls:"")}
+
+function setMode(m){
+  S.mode=m;
+  $("tabWorker").className=m==="worker"?"on":"";
+  $("tabToken").className=m==="token"?"on":"";
+  $("modeWorker").style.display=m==="worker"?"":"none";
+  $("modeToken").style.display=m==="token"?"":"none";
+}
+
+function b64encode(str){
+  const bytes=new TextEncoder().encode(str); let bin="";
+  bytes.forEach(b=>bin+=String.fromCharCode(b)); return btoa(bin);
+}
+function b64decode(b64){
+  const bin=atob((b64||"").replace(/\n/g,""));
+  return new TextDecoder().decode(Uint8Array.from(bin,c=>c.charCodeAt(0)));
+}
+
+// marked renderer: notice for snippets
+const renderer = new marked.Renderer();
+renderer.blockquote = function(quote){ return "<blockquote>"+quote+"</blockquote>"; };
+marked.setOptions({ gfm:true, breaks:false, renderer });
+
+function resolveMdImages(html){
+  // docs/products/foo/index.md + assets/... → raw github
+  const page = S.cur && S.cur.path ? S.cur.path : "docs/index.md";
+  const dir = page.split("/").slice(0,-1).join("/");
+  return html.replace(/<img src="([^"]+)"/g, (m,src)=>{
+    if(/^(https?:|data:)/.test(src)) return m;
+    let abs = src;
+    if(src.startsWith("../") || src.startsWith("./") || !src.includes("://")){
+      // resolve relative to docs dir path
+      const parts = (dir+"/"+src).split("/");
+      const stack=[];
+      parts.forEach(p=>{ if(p===".." ) stack.pop(); else if(p!=="."&&p!=="") stack.push(p); });
+      abs = stack.join("/");
+    }
+    const raw = "https://raw.githubusercontent.com/"+S.owner+"/"+S.name+"/main/"+abs.replace(/^\/+/,"");
+    return `<img src="${raw}"`;
+  });
+}
+
+function renderPreview(){
+  const src=$("editor").value;
+  let html=src.replace(/--8<--\s+"([^"]+)"/g, '\n\n<div class="snip">📄 公共模块已插入：<code>$1</code>（构建时展开，预览显示为摘要位）</div>\n\n');
+  try{ html=marked.parse(html); }catch(e){ html="<pre>"+src.replace(/</g,"&lt;")+"</pre>"; }
+  $("preview").innerHTML=resolveMdImages(html);
+}
+
+async function api(path, options={}){
+  let headers={"Content-Type":"application/json"};
+  if(S.mode==="worker"){
+    headers.Authorization="Bearer "+S.pass;
+    const res=await fetch(S.worker.replace(/\/$/,"")+path,{...options,headers});
+    const data=await res.json();
+    if(!res.ok) throw new Error(data.error||res.statusText);
+    return data;
+  }else{
+    headers.Authorization="Bearer "+S.token;
+    headers.Accept="application/vnd.github+json";
+    headers["X-GitHub-Api-Version"]="2022-11-28";
+    const res=await fetch("https://api.github.com"+path,{...options,headers});
+    const data=await res.json().catch(()=>({}));
+    if(!res.ok) throw new Error(data.message||res.statusText);
+    return data;
+  }
+}
+
+async function ghFiles(){
+  const ref=await api(`/repos/${S.owner}/${S.name}/git/ref/heads/main`);
+  const commit=await api(`/repos/${S.owner}/${S.name}/git/commits/${ref.object.sha}`);
+  const tree=await api(`/repos/${S.owner}/${S.name}/git/trees/${commit.tree.sha}?recursive=1`);
+  return (tree.tree||[])
+    .filter(t=>t.type==="blob" && t.path.startsWith("docs/") && t.path.endsWith(".md"))
+    .map(t=>t.path).sort();
+}
+
+async function login(){
+  if(S.mode==="worker"){
+    S.worker=$("workerUrl").value.trim();
+    S.pass=$("teamPass").value;
+    if(!S.worker||!S.pass){ st($("loginStatus"),"请填写 Worker 地址和团队密码","err"); return; }
+  }else{
+    S.token=$("tokenInput").value.trim();
+    S.repo=$("repoInput").value.trim();
+    const p=S.repo.split("/"); S.owner=p[0]; S.name=p[1];
+    if(!S.token||!S.name){ st($("loginStatus"),"请填写 Token 和仓库","err"); return; }
+  }
+  st($("loginStatus"),"正在登录…","warn");
+  try{
+    if(S.mode==="token"){
+      const me=await api("/user");
+      S.user=me.login;
+    }else S.user="team";
+    S.rawBase="https://raw.githubusercontent.com/"+S.owner+"/"+S.name+"/main/";
+    localStorage.setItem(LS.m,S.mode);
+    localStorage.setItem(LS.w,S.worker);
+    localStorage.setItem(LS.p,S.pass);
+    localStorage.setItem(LS.t,S.token);
+    localStorage.setItem(LS.r,S.repo);
+    $("loginView").style.display="none";
+    $("appView").style.display="grid";
+    $("userMeta") && ($("userMeta").textContent=S.user);
+    headerUser();
+    await loadFiles();
+  }catch(e){
+    st($("loginStatus"),"登录失败："+e.message,"err");
+  }
+}
+function headerUser(){
+  const h=$("userMeta");
+  if(h) h.textContent=(S.mode==="worker"?"团队密码登录":"Token · "+S.user)+" · "+S.owner+"/"+S.name;
+}
+
+function logout(){
+  Object.values(LS).forEach(k=>localStorage.removeItem(k));
+  location.reload();
+}
+
+async function loadFiles(){
+  st($("saveStatus"),"加载文件…","warn");
+  try{
+    if(S.mode==="token") S.files=await ghFiles();
+    else {
+      const data=await api("/api/files");
+      S.files=data.files.filter(f=>f.path.endsWith(".md")).map(f=>f.path).sort();
+    }
+    renderList();
+    st($("saveStatus"),"共 "+S.files.length+" 个说明书页面","ok");
+  }catch(e){ st($("saveStatus"),"加载失败："+e.message,"err"); }
+}
+
+function groupOf(p){
+  if(p.startsWith("docs/shared/flight-controller/")) return "飞控通用（多款飞控共用）";
+  if(p.startsWith("docs/shared/esc/")) return "电调通用（多款电调共用）";
+  if(p.startsWith("docs/shared/can/")) return "CAN 通用";
+  if(p.startsWith("docs/shared/bec/")) return "BEC 通用";
+  if(p.startsWith("docs/shared/")) return "公共模块（全产品共用）";
+  if(p.startsWith("docs/products/")) return "产品特有说明书";
+  if(p.startsWith("docs/help/")||p.includes("catalog")||p==="docs/index.md") return "首页 / 目录 / 帮助";
+  return "其他";
+}
+
+const GROUP_ORDER = [
+  "公共模块（全产品共用）",
+  "飞控通用（多款飞控共用）",
+  "电调通用（多款电调共用）",
+  "CAN 通用",
+  "BEC 通用",
+  "产品特有说明书",
+  "首页 / 目录 / 帮助",
+  "其他"
+];
+
+const MODULE_TITLES = {
+  "shared/safety.md": "安全注意事项",
+  "shared/first-use-check.md": "首次使用检查",
+  "shared/soldering.md": "焊接注意事项",
+  "shared/warranty.md": "售后与保修",
+  "shared/support.md": "技术支持",
+  "shared/firmware-download.md": "固件下载说明",
+  "shared/faq.md": "常见问题",
+  "shared/brand-intro.md": "品牌介绍",
+  "shared/other-products.md": "FlyingRC® 其它产品",
+  "shared/disclaimer.md": "免责声明",
+  "shared/flight-controller/usb-driver.md": "USB 驱动与连接",
+  "shared/flight-controller/ardupilot-flashing.md": "ArduPilot 固件说明",
+  "shared/flight-controller/inav-flashing.md": "INAV 固件说明",
+  "shared/flight-controller/betaflight-flashing.md": "Betaflight 固件说明",
+  "shared/flight-controller/receiver-wiring.md": "接收机连接说明",
+  "shared/esc/am32-setup.md": "AM32 固件与调参",
+  "shared/esc/motor-direction.md": "电机转向与油门协议",
+  "shared/can/can-wiring.md": "CAN 总线接线"
+};
+
+function moduleLabel(p){
+  return MODULE_TITLES[p] || p.replace(/^docs\//,"").replace(/^shared\//,"").replace(/\.md$/,"");
+}
+
+function isProductPage(p){
+  return /^docs\/products\/[^/]+\/index\.md$/.test(p);
+}
+
+function productName(p){
+  const m = p.match(/^docs\/products\/([^/]+)\/index\.md$/);
+  return m ? m[1] : "";
+}
+
+function sharedModulePaths(){
+  return S.files.filter(p=>p.startsWith("docs/shared/") && p.endsWith(".md"))
+    .map(p=>p.replace(/^docs\//,""))
+    .filter(p=>!p.endsWith("other-products.md") || true)
+    .sort((a,b)=>{
+      const ga = a.indexOf("flight-controller")>=0?1:a.indexOf("/esc/")>=0?2:a.indexOf("/can/")>=0?3:0;
+      const gb = b.indexOf("flight-controller")>=0?1:b.indexOf("/esc/")>=0?2:b.indexOf("/can/")>=0?3:0;
+      return ga-gb || a.localeCompare(b);
+    });
+}
+
+function currentIncludes(content){
+  const re = /--8<--\s+"(shared\/[^"]+)"/g;
+  const set = {};
+  let m;
+  while((m = re.exec(content))) set[m[1]] = true;
+  return set;
+}
+
+function renderList(){
+  const q=($("filter").value||"").toLowerCase();
+  const list=$("fileList"); list.innerHTML="";
+  const matched = S.files.filter(p=>!q||p.toLowerCase().includes(q));
+  const byGroup = {};
+  matched.forEach(p=>{
+    const g=groupOf(p);
+    (byGroup[g]=byGroup[g]||[]).push(p);
+  });
+  GROUP_ORDER.forEach(g=>{
+    const arr = byGroup[g];
+    if(!arr || !arr.length) return;
+    const d=document.createElement("div");
+    d.className="group";
+    d.textContent = g + "（"+arr.length+"）";
+    list.appendChild(d);
+    arr.forEach(p=>{
+      const el=document.createElement("div");
+      el.className="item"+(S.cur&&S.cur.path===p?" active":"");
+      const short=p.replace(/^docs\//,"");
+      let sub = "页面";
+      if(p.startsWith("docs/shared/")) sub = "公共/系列";
+      if(isProductPage(p)) sub = "产品 · 可配置模块";
+      if(p.startsWith("docs/products/")) sub = "产品特有";
+      el.innerHTML = moduleLabel(p.startsWith("docs/shared/")?("docs/"+p.replace(/^docs\//,"")):p).replace(/^docs\//,"") +
+        "<small>" + short + " · " + sub + "</small>";
+      // simpler display
+      el.innerHTML = (isProductPage(p) ? ("📁 " + productName(p)) : (p.startsWith("docs/shared/") ? ("📄 " + (MODULE_TITLES[p.replace(/^docs\//,"")] || short)) : short))
+        + "<small>" + short + "</small>";
+      el.onclick=()=>openFile(p);
+      list.appendChild(el);
+    });
+  });
+}
+
+async function openFile(path){
+  if(S.cur && $("editor").value!==S.cur.original && !confirm("有未保存修改，确定切换？")) return;
+  st($("saveStatus"),"打开 "+path+" …","warn");
+  try{
+    let sha, content;
+    if(S.mode==="token"){
+      const data=await api("/repos/"+S.owner+"/"+S.name+"/contents/"+path+"?ref=main");
+      sha=data.sha; content=b64decode(data.content||"");
+    }else{
+      const data=await api("/api/file/"+encodeURIComponent(path));
+      sha=data.sha; content=data.content;
+    }
+    S.cur={path,sha,content,original:content};
+    $("editor").value=content;
+    $("curPath").textContent=path;
+    $("saveBtn").disabled=false;
+    $("modBtn").disabled = !isProductPage(path);
+    renderPreview();
+    renderList();
+    st($("saveStatus"),"已打开，可直接改文字"+(isProductPage(path)?"；也可点「产品模块」勾选公共章节":""),"ok");
+  }catch(e){ st($("saveStatus"),"打开失败："+e.message,"err"); }
+}
+
+function openModuleConfig(){
+  if(!S.cur || !isProductPage(S.cur.path)) return;
+  const inc = currentIncludes($("editor").value);
+  const mods = sharedModulePaths();
+  $("modTitle").textContent = "「"+productName(S.cur.path)+"」包含哪些章节";
+  const box = $("modList");
+  box.innerHTML = "";
+  const groups = [
+    { title: "公共模块（全产品）", test: p=>!p.includes("/") || (p.split("/").length===2) },
+    { title: "飞控通用", test: p=>p.indexOf("flight-controller/")>=0 },
+    { title: "电调通用", test: p=>p.indexOf("esc/")>=0 },
+    { title: "CAN 通用", test: p=>p.indexOf("can/")>=0 }
+  ];
+  // render in order
+  const used = {};
+  groups.forEach(g=>{
+    const items = mods.filter(p=>g.test(p) && !used[p]);
+    if(!items.length) return;
+    const h=document.createElement("div");
+    h.style.cssText="font-size:12px;font-weight:600;color:var(--muted);margin:10px 6px 6px";
+    h.textContent=g.title;
+    box.appendChild(h);
+    items.forEach(p=>{
+      used[p]=true;
+      const row=document.createElement("label");
+      row.style.cssText="display:flex;gap:8px;align-items:flex-start;margin:4px 6px;font-size:13px;color:var(--text);cursor:pointer";
+      row.innerHTML = "<input type='checkbox' data-mod='"+p+"' "+(inc[p]?"checked":"")+" /> <span><b>"+(MODULE_TITLES[p]||p)+"</b><br><small style='color:var(--muted)'>"+p+"</small></span>";
+      box.appendChild(row);
+    });
+  });
+  $("modModal").classList.add("on");
+}
+
+function closeModModal(){ $("modModal").classList.remove("on"); }
+
+function removeModule(content, modPath){
+  const title = MODULE_TITLES[modPath];
+  // remove snippet line
+  let c = content.replace(new RegExp("^--8<--\\s+\"" + modPath.replace(/[.*+?^${}()|[\]\\]/g,"\\$&") + "\"\\n?", "gm"), "");
+  // remove auto section: ## Title \n\n ---  or just ## Title before snippet
+  if(title){
+    c = c.replace(new RegExp("^##\\s+" + title.replace(/[.*+?^${}()|[\]\\]/g,"\\$&") + "\\s*\\n+", "gm"), "");
+    // clean leftover --- runs
+    c = c.replace(/(?:^---\s*\n){2,}/gm, "---\n");
+    c = c.replace(/\n{3,}/g, "\n\n");
+  }
+  return c;
+}
+
+function applyModuleConfig(){
+  if(!S.cur || !isProductPage(S.cur.path)) return;
+  const boxes = $("modList").querySelectorAll("input[type=checkbox][data-mod]");
+  const want = {};
+  boxes.forEach(b=>{ if(b.checked) want[b.dataset.mod]=true; });
+  let content = $("editor").value;
+  const had = currentIncludes(content);
+  // remove all shared includes then re-add? safer: only add missing, only remove unchecked
+  Object.keys(had).forEach(p=>{ if(!want[p]) content = removeModule(content, p); });
+  // add missing
+  const toAdd = Object.keys(want).filter(p=>!had[p]);
+  if(toAdd.length){
+    const block = toAdd.map(p=>{
+      const t = MODULE_TITLES[p] || p;
+      return "## " + t + "\n\n--8<-- \"" + p + "\"\n";
+    }).join("\n---\n\n");
+    const insert = "\n---\n\n" + block + "\n---\n\n";
+    if(/## 免责声明/.test(content)){
+      content = content.replace(/## 免责声明/, insert + "## 免责声明");
+    } else if(/## FlyingRC® 其它产品/.test(content)){
+      content = content.replace(/## FlyingRC® 其它产品/, insert + "## FlyingRC® 其它产品");
+    } else {
+      content = content.replace(/\s*$/, "\n\n" + insert);
+    }
+  }
+  $("editor").value = content;
+  renderPreview();
+  closeModModal();
+  st($("saveStatus"), "已更新章节结构（共 "+Object.keys(want).length+" 个公共/系列模块）。请点「保存并发布」。", "ok");
+}
+
+function discard(){ if(!S.cur) return; $("editor").value=S.cur.original; renderPreview(); st($("saveStatus"),"已撤销未保存修改","warn"); }
+function togglePrev(){ $("editWrap").classList.toggle("showprev"); $("editWrap").classList.toggle("single"); renderPreview(); }
+
+function wrap(a,b){
+  const t=$("editor"), s=t.selectionStart, e=t.selectionEnd, v=t.value;
+  const sel=v.slice(s,e)||"文字";
+  t.value=v.slice(0,s)+a+sel+b+v.slice(e);
+  t.focus(); t.selectionStart=s+a.length; t.selectionEnd=s+a.length+sel.length; renderPreview();
+}
+function prefix(p){
+  const t=$("editor"), s=t.selectionStart, v=t.value;
+  const start=v.lastIndexOf("\n",s-1)+1;
+  t.value=v.slice(0,start)+p+v.slice(start);
+  t.focus(); t.selectionStart=t.selectionEnd=s+p.length; renderPreview();
+}
+function insertAt(text){
+  const t=$("editor"), s=t.selectionStart, v=t.value;
+  t.value=v.slice(0,s)+text+v.slice(s); t.focus();
+  t.selectionStart=t.selectionEnd=s+text.length; renderPreview();
+}
+function insertTable(){
+  insertAt("\n| 项目 | 说明 |\n|------|------|\n| 示例 | 内容 |\n");
+}
+function insertAdm(){
+  insertAt("\n!!! note \"提示\"\n\n    这里写提醒内容。\n\n");
+}
+function insertSnippet(){
+  const name=prompt("公共模块路径（相对 docs/）", "shared/warranty.md");
+  if(name) insertAt('\n--8<-- "'+name+'"\n');
+}
+function insertLink(){
+  const url=prompt("链接地址","https://www.FlyingRC.cn");
+  const text=prompt("显示文字","FlyingRC 官网")||url;
+  if(url) insertAt("["+text+"]("+url+")");
+}
+function insertImage(){ $("fileInput").click(); $("fileInput").dataset.mode="insert"; }
+function uploadImage(){ $("fileInput").click(); $("fileInput").dataset.mode="upload"; }
+
+async function doUploadImage(ev){
+  const f=ev.target.files[0]; if(!f) return;
+  const mode=ev.target.dataset.mode||"upload";
+  const folder=(S.cur&&S.cur.path.includes("/products/"))
+    ? "docs/assets/"+S.cur.path.split("/")[2]
+    : "docs/assets/uploads";
+  const path=folder+"/"+f.name.replace(/\s+/g,"-");
+  st($("saveStatus"),"上传图片中…","warn");
+  try{
+    const buf=await f.arrayBuffer();
+    const b64=btoa(Array.from(new Uint8Array(buf)).map(b=>String.fromCharCode(b)).join(""));
+    if(S.mode==="token"){
+      let sha;
+      try{ const ex=await api("/repos/"+S.owner+"/"+S.name+"/contents/"+path+"?ref=main"); sha=ex.sha; }catch(_){}
+      await api("/repos/"+S.owner+"/"+S.name+"/contents/"+path,{
+        method:"PUT",
+        body:JSON.stringify({message:"assets: "+path,content:b64,sha,branch:"main"})
+      });
+    }else{
+      await api("/api/upload",{method:"POST",body:JSON.stringify({path,contentBase64:b64,message:"assets: "+path})});
+    }
+    const rel="../../"+path.replace(/^docs\//,"");
+    if(mode==="insert") insertAt("!["+f.name+"]("+rel+")");
+    st($("saveStatus"),"已上传："+path+"（保存说明书后一并生效；图片已立刻进入仓库）","ok");
+  }catch(e){ st($("saveStatus"),"上传失败："+e.message,"err"); }
+  ev.target.value="";
+}
+
+async function save(){
+  if(!S.cur) return;
+  const content=$("editor").value;
+  if(content===S.cur.original){ st($("saveStatus"),"内容没有变化","warn"); return; }
+  const msg=prompt("这次改了什么？（会记入版本历史）","docs: 更新说明书内容");
+  if(msg===null) return;
+  $("saveBtn").disabled=true; st($("saveStatus"),"正在保存…","warn");
+  try{
+    if(S.mode==="token"){
+      await api("/repos/"+S.owner+"/"+S.name+"/contents/"+S.cur.path,{
+        method:"PUT",
+        body:JSON.stringify({message:msg,content:b64encode(content),sha:S.cur.sha,branch:"main"})
+      });
+      const data=await api("/repos/"+S.owner+"/"+S.name+"/contents/"+S.cur.path+"?ref=main");
+      S.cur={path:S.cur.path,sha:data.sha,content,original:content};
+    }else{
+      await api("/api/file/"+encodeURIComponent(S.cur.path),{
+        method:"PUT",
+        body:JSON.stringify({message:msg,content,sha:S.cur.sha})
+      });
+      const data=await api("/api/file/"+encodeURIComponent(S.cur.path));
+      S.cur={path:S.cur.path,sha:data.sha,content,original:content};
+    }
+    $("saveBtn").disabled=false;
+    st($("saveStatus"),"已保存。网站将在约 1–2 分钟内自动更新。","ok");
+  }catch(e){
+    $("saveBtn").disabled=false;
+    st($("saveStatus"),"保存失败："+e.message,"err");
+  }
+}
+
+function openNew(){ $("modal").classList.add("on"); }
+function closeModal(){ $("modal").classList.remove("on"); }
+async function createFile(){
+  let p=$("newPath").value.trim().replace(/^docs\//,"");
+  const title=$("newTitle").value.trim()||"新页面";
+  if(!p.endsWith(".md")) p=p+".md";
+  const path="docs/"+p;
+  const content="# "+title+"\n\n这里开始写正文。\n";
+  closeModal();
+  try{
+    if(S.mode==="token"){
+      await api("/repos/"+S.owner+"/"+S.name+"/contents/"+path,{
+        method:"PUT",
+        body:JSON.stringify({message:"docs: create "+path,content:b64encode(content),branch:"main"})
+      });
+    }else{
+      await api("/api/file/"+encodeURIComponent(path),{
+        method:"PUT", body:JSON.stringify({message:"docs: create "+path,content})
+      });
+    }
+    await loadFiles();
+    await openFile(path);
+    st($("saveStatus"),"已新建。记得在「产品总目录」或导航中加入链接。","ok");
+  }catch(e){ st($("saveStatus"),"新建失败："+e.message,"err"); }
+}
+
+$("editor").addEventListener("input",renderPreview);
+(function boot(){
+  const m=localStorage.getItem(LS.m)||"worker";
+  setMode(m);
+  $("workerUrl").value=localStorage.getItem(LS.w)||"";
+  $("teamPass").value=localStorage.getItem(LS.p)||"";
+  $("tokenInput").value=localStorage.getItem(LS.t)||"";
+  $("repoInput").value=localStorage.getItem(LS.r)||"Vulkanowrs/flyingrc-manuals";
+  if((m==="worker"&&$("workerUrl").value&&$("teamPass").value)||(m==="token"&&$("tokenInput").value)){
+    login();
+  }
+})();
+</script>
+</body>
+</html>
