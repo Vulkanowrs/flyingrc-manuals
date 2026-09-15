@@ -165,3 +165,210 @@ am32-75a-v25:
 # 占位：后续迁移更多产品时补充
 # h7d-pro:
 #   name: ...
+
+f4d-mk1:
+  name: "FlyingRC® F4D MK1"
+  category: flight-controller
+  status: active
+  short_code: f4d
+  manual_url: /manual/f4d-mk1/
+  firmware_url: /downloads/f4d-mk1/
+  migrated_from: WPS docx
+
+f4wse-mk15:
+  name: "FlyingRC® F4WSE MK1.5"
+  category: flight-controller
+  status: active
+  short_code: f4wsem
+  manual_url: /manual/f4wse-mk15/
+  firmware_url: /downloads/f4wse-mk15/
+  migrated_from: WPS docx
+
+f435wing-osd:
+  name: "FlyingRC® F435Wing Mini OSD"
+  category: flight-controller
+  status: active
+  short_code: f435osd
+  manual_url: /manual/f435wing-osd/
+  firmware_url: /downloads/f435wing-osd/
+  migrated_from: WPS docx
+
+esc-4in1-45a:
+  name: "FlyingRC® 4IN1 45A ESC"
+  category: esc
+  status: active
+  short_code: 45a
+  manual_url: /manual/esc-4in1-45a/
+  firmware_url: /downloads/esc-4in1-45a/
+  migrated_from: WPS docx
+
+esc-dual-40a:
+  name: "FlyingRC® AM32 Dual 40A"
+  category: esc
+  status: active
+  short_code: dual40
+  manual_url: /manual/esc-dual-40a/
+  firmware_url: /downloads/esc-dual-40a/
+  migrated_from: WPS docx
+
+esc-75a-can:
+  name: "FlyingRC® AM32 75A CAN"
+  category: esc
+  status: active
+  short_code: 75acan
+  manual_url: /manual/esc-75a-can/
+  firmware_url: /downloads/esc-75a-can/
+  migrated_from: WPS docx
+
+esc-control-board:
+  name: "FlyingRC® AM32 电调控制板"
+  category: esc
+  status: active
+  short_code: escboard
+  manual_url: /manual/esc-control-board/
+  firmware_url: /downloads/esc-control-board/
+  migrated_from: WPS docx
+
+am32-programmer:
+  name: "FlyingRC® AM32 调参器"
+  category: accessory
+  status: active
+  short_code: prog
+  manual_url: /manual/am32-programmer/
+  firmware_url: /downloads/am32-programmer/
+  migrated_from: WPS docx
+
+bec-10a-12s:
+  name: "FlyingRC® 10A 12S BEC"
+  category: bec
+  status: active
+  short_code: bec1012
+  manual_url: /manual/bec-10a-12s/
+  firmware_url: /downloads/bec-10a-12s/
+  migrated_from: WPS docx
+
+bec-10a-8s:
+  name: "FlyingRC® 10A 8S BEC"
+  category: bec
+  status: active
+  short_code: bec108
+  manual_url: /manual/bec-10a-8s/
+  firmware_url: /downloads/bec-10a-8s/
+  migrated_from: WPS docx
+
+bec-5a-12s:
+  name: "FlyingRC® 5A 12S BEC"
+  category: bec
+  status: active
+  short_code: bec512
+  manual_url: /manual/bec-5a-12s/
+  firmware_url: /downloads/bec-5a-12s/
+  migrated_from: WPS docx
+
+bec-5a-6s:
+  name: "FlyingRC® 5A 6S BEC"
+  category: bec
+  status: active
+  short_code: bec56
+  manual_url: /manual/bec-5a-6s/
+  firmware_url: /downloads/bec-5a-6s/
+  migrated_from: WPS docx
+
+bec-dji-o4:
+  name: "FlyingRC® Mini BEC For DJI O4"
+  category: bec
+  status: active
+  short_code: becdji
+  manual_url: /manual/bec-dji-o4/
+  firmware_url: /downloads/bec-dji-o4/
+  migrated_from: WPS docx
+
+elrs-24g:
+  name: "FlyingRC® ELRS 2.4G 真分集"
+  category: receiver
+  status: active
+  short_code: elrs
+  manual_url: /manual/elrs-24g/
+  firmware_url: /downloads/elrs-24g/
+  migrated_from: WPS docx
+
+gps-m10:
+  name: "FlyingRC® U-Blox M10 GPS"
+  category: gps
+  status: active
+  short_code: m10
+  manual_url: /manual/gps-m10/
+  firmware_url: /downloads/gps-m10/
+  migrated_from: WPS docx
+
+airspeed-i2c:
+  name: "FlyingRC® I2C 空速计（新款）"
+  category: module
+  status: active
+  short_code: asnew
+  manual_url: /manual/airspeed-i2c/
+  firmware_url: /downloads/airspeed-i2c/
+  migrated_from: WPS docx
+
+airspeed-old:
+  name: "FlyingRC® 无空速管空速计"
+  category: module
+  status: discontinued
+  short_code: asold
+  manual_url: /manual/airspeed-old/
+  firmware_url: /downloads/airspeed-old/
+  migrated_from: WPS docx
+
+i2c-current:
+  name: "FlyingRC® I2C 外置电流计"
+  category: module
+  status: active
+  short_code: i2ccur
+  manual_url: /manual/i2c-current/
+  firmware_url: /downloads/i2c-current/
+  migrated_from: WPS docx
+
+rm3100-spi:
+  name: "FlyingRC® RM3100 SPI 罗盘"
+  category: module
+  status: active
+  short_code: rm3100
+  manual_url: /manual/rm3100-spi/
+  firmware_url: /downloads/rm3100-spi/
+  migrated_from: WPS docx
+
+rm3100-can:
+  name: "FlyingRC® L4CAN RM3100"
+  category: module
+  status: active
+  short_code: rm3100can
+  manual_url: /manual/rm3100-can/
+  firmware_url: /downloads/rm3100-can/
+  migrated_from: WPS docx
+
+telemetry:
+  name: "FlyingRC® 数传模块"
+  category: module
+  status: active
+  short_code: telem
+  manual_url: /manual/telemetry/
+  firmware_url: /downloads/telemetry/
+  migrated_from: WPS docx
+
+pdb-12s-440a:
+  name: "FlyingRC® 12S 440A 分电板"
+  category: power
+  status: active
+  short_code: pdb
+  manual_url: /manual/pdb-12s-440a/
+  firmware_url: /downloads/pdb-12s-440a/
+  migrated_from: WPS docx
+
+l4-can-adapter:
+  name: "FlyingRC® L4 CAN 扩展板"
+  category: module
+  status: active
+  short_code: l4can
+  manual_url: /manual/l4-can-adapter/
+  firmware_url: /downloads/l4-can-adapter/
+  migrated_from: WPS docx

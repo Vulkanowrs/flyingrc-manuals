@@ -78,8 +78,38 @@ nav:
       - 飞控:
           - F4WSE PRO: products/f4wse-pro/index.md
           - F4Wing Mini MK1: products/f4wing-mini/index.md
+          - FlyingRC® H7D Pro: products/h7d-pro/index.md
+          - FlyingRC® F4D MK1: products/f4d-mk1/index.md
+          - FlyingRC® F4WSE MK1.5: products/f4wse-mk15/index.md
+          - FlyingRC® F435Wing Mini OSD: products/f435wing-osd/index.md
       - 电调:
           - AM32 75A ESC V2.5: products/am32-75a-v25/index.md
+          - FlyingRC® 4IN1 45A ESC: products/esc-4in1-45a/index.md
+          - FlyingRC® AM32 Dual 40A: products/esc-dual-40a/index.md
+          - FlyingRC® AM32 75A CAN: products/esc-75a-can/index.md
+          - FlyingRC® AM32 电调控制板: products/esc-control-board/index.md
+      - BEC:
+          - FlyingRC® 10A 12S BEC: products/bec-10a-12s/index.md
+          - FlyingRC® 10A 8S BEC: products/bec-10a-8s/index.md
+          - FlyingRC® 5A 12S BEC: products/bec-5a-12s/index.md
+          - FlyingRC® 5A 6S BEC: products/bec-5a-6s/index.md
+          - FlyingRC® Mini BEC For DJI O4: products/bec-dji-o4/index.md
+      - 模块与外设:
+          - FlyingRC® I2C 空速计（新款）: products/airspeed-i2c/index.md
+          - FlyingRC® 无空速管空速计: products/airspeed-old/index.md
+          - FlyingRC® I2C 外置电流计: products/i2c-current/index.md
+          - FlyingRC® RM3100 SPI 罗盘: products/rm3100-spi/index.md
+          - FlyingRC® L4CAN RM3100: products/rm3100-can/index.md
+          - FlyingRC® 数传模块: products/telemetry/index.md
+          - FlyingRC® L4 CAN 扩展板: products/l4-can-adapter/index.md
+      - GPS:
+          - FlyingRC® U-Blox M10 GPS: products/gps-m10/index.md
+      - 接收机:
+          - FlyingRC® ELRS 2.4G 真分集: products/elrs-24g/index.md
+      - 分电板:
+          - FlyingRC® 12S 440A 分电板: products/pdb-12s-440a/index.md
+      - 工具配件:
+          - FlyingRC® AM32 调参器: products/am32-programmer/index.md
   - 公共说明:
       - 安全注意事项: shared/safety.md
       - 首次使用检查: shared/first-use-check.md
