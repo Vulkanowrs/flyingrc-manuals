@@ -71,6 +71,18 @@ header h1{margin:0;font-size:17px}
   display:inline-block;margin-top:8px;padding:6px 12px;background:#0f766e;color:#fff;
   border-radius:8px;font-size:12px;cursor:pointer;border:0;font-weight:600;
 }
+.mod-chip{
+  border:1px solid #64748b;background:#fff;border-radius:999px;padding:8px 14px;
+  font-size:13px;cursor:pointer;color:var(--text)
+}
+.mod-chip:hover{border-color:var(--brand);color:var(--brand)}
+.mod-chip.on{background:var(--brand);color:#fff;border-color:var(--brand);font-weight:600}
+.matrix{border-collapse:collapse;font-size:12px;width:100%}
+.matrix th,.matrix td{border:1px solid #cbd5e1;padding:6px 4px;text-align:center;background:#fff;color:var(--text)}
+.matrix th{background:#e2e8f0;font-weight:700;position:sticky;top:0;z-index:1}
+.matrix td.prod{text-align:left;padding:6px 8px;font-weight:600;min-width:120px}
+.matrix input{width:16px;height:16px;accent-color:var(--brand)}
+#navFiles.on,#navModules.on{background:var(--brand);color:#fff;font-weight:600}
 .login{max-width:520px;margin:6vh auto;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:var(--shadow)}
 .login h2{margin:0 0 6px}
 .login .desc{color:var(--muted);font-size:13px;line-height:1.6;margin-bottom:8px}
@@ -138,6 +150,8 @@ input[type=text],input[type=password]{width:100%;padding:11px 12px;border:1px so
   </aside>
   <section class="main">
     <div class="bar">
+      <button class="btn primary" id="navFiles" onclick="showAppView('files')">文件编辑</button>
+      <button class="btn" id="navModules" onclick="showAppView('modules')">公共模块中心</button>
       <div class="path" id="curPath">先在左侧选择说明书文件</div>
       <button class="btn ghost" onclick="toggleMode()">切换：所见即所得 / Markdown</button>
       <button class="btn ghost" onclick="discard()">撤销改动</button>
@@ -146,7 +160,40 @@ input[type=text],input[type=password]{width:100%;padding:11px 12px;border:1px so
       <button class="btn primary" id="saveBtn" onclick="save()" disabled>保存并发布</button>
     </div>
     <div class="status" id="saveStatus"></div>
-    <div id="editorHost"><div id="vditor"></div></div>
+
+    <!-- 文件编辑 -->
+    <div id="viewFiles" style="flex:1;min-height:0;display:flex;flex-direction:column">
+      <div id="editorHost" style="flex:1;min-height:0;display:flex;flex-direction:column"><div id="vditor"></div></div>
+    </div>
+
+    <!-- 公共模块中心 -->
+    <div id="viewModules" style="flex:1;min-height:0;display:none;flex-direction:column;gap:0">
+      <div style="padding:12px 16px;border-bottom:1px solid var(--line);background:#f8fafc">
+        <div style="font-size:14px;font-weight:700;margin-bottom:6px">① 选一个公共模块改正文（改一处，所有产品同步）</div>
+        <div id="modChips" style="display:flex;flex-wrap:wrap;gap:8px"></div>
+      </div>
+      <div style="flex:1;min-height:0;display:grid;grid-template-columns:1.2fr 1fr">
+        <div style="display:flex;flex-direction:column;min-height:0;border-right:1px solid var(--line)">
+          <div class="bar" style="padding:8px 12px">
+            <div class="path" id="modPath">选择上方模块</div>
+            <button class="btn primary" id="modSaveBtn" onclick="saveSharedModule()" disabled>保存此模块</button>
+          </div>
+          <div id="modEditorHost" style="flex:1;min-height:0"><div id="modVditor"></div></div>
+        </div>
+        <div style="display:flex;flex-direction:column;min-height:0">
+          <div style="padding:10px 14px;border-bottom:1px solid var(--line);background:#f8fafc">
+            <div style="font-size:14px;font-weight:700">② 哪些产品包含哪些公共章节</div>
+            <div style="font-size:12px;color:var(--muted);margin-top:4px">行=产品，列=模块。勾选后点下方「写入所有产品页」。</div>
+          </div>
+          <div style="flex:1;overflow:auto;padding:8px" id="matrixWrap"></div>
+          <div style="padding:10px 14px;border-top:1px solid var(--line);display:flex;gap:8px;flex-wrap:wrap">
+            <button class="btn ghost" onclick="matrixSelectAll(true)">全选当前列</button>
+            <button class="btn ghost" onclick="matrixSelectAll(false)">清空当前列</button>
+            <button class="btn primary" onclick="applyMatrixToProducts()">写入所有产品页（需推送）</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </section>
 </div>
 
@@ -301,6 +348,8 @@ async function login(){
     $("appView").style.display="grid";
     headerUser();
     initVditor();
+    $("navFiles").className="btn primary on";
+    $("navModules").className="btn";
     await loadFiles();
   }catch(e){ st($("loginStatus"),"登录失败："+e.message,"err"); }
 }
@@ -349,6 +398,243 @@ function insertAdm(kind){
   const titles={tip:"提示",warning:"注意",info:"说明",danger:"危险",note:"备注"};
   const md=`\n\n!!! ${kind} "${titles[kind]||kind}"\n\n    在这里写内容。\n\n`;
   if(S.vditor) S.vditor.insertValue(md);
+}
+
+// ---- 公共模块中心 ----
+function showAppView(which){
+  const files = which==="files";
+  $("viewFiles").style.display = files ? "flex" : "none";
+  $("viewModules").style.display = files ? "none" : "flex";
+  $("navFiles").className = files ? "btn primary on" : "btn";
+  $("navModules").className = files ? "btn" : "btn primary on";
+  if(!files){
+    renderModuleChips();
+    initModVditor();
+    renderMatrix();
+    st($("saveStatus"),"公共模块中心：左侧改正文，右侧勾产品包含关系","ok");
+  }else{
+    st($("saveStatus"),"文件编辑模式","ok");
+  }
+}
+
+function sharedRelPaths(){
+  return S.files.filter(p=>p.startsWith("docs/shared/")&&p.endsWith(".md"))
+    .map(p=>p.replace(/^docs\//,""))
+    .filter(p=>!p.includes("/")) // only top-level shared first for chips; include series too
+    .concat(S.files.filter(p=>p.startsWith("docs/shared/")&&p.endsWith(".md")&&p.includes("/"))
+      .map(p=>p.replace(/^docs\//,"")))
+    .sort();
+}
+
+function renderModuleChips(){
+  const box=$("modChips"); box.innerHTML="";
+  const mods = S.files.filter(p=>p.startsWith("docs/shared/")&&p.endsWith(".md"))
+    .map(p=>p.replace(/^docs\//,"")).sort((a,b)=>{
+      const rank=x=>x.split("/").length===2?0:1;
+      return rank(a)-rank(b) || a.localeCompare(b);
+    });
+  mods.forEach(rel=>{
+    const b=document.createElement("button");
+    b.type="button";
+    b.className="mod-chip"+(S.modCur===rel?" on":"");
+    b.textContent = (MODULE_TITLES[rel]||rel) + (rel.split("/").length>2 ? " ·"+rel.split("/")[1] : "");
+    b.onclick=()=>openSharedModule(rel);
+    box.appendChild(b);
+  });
+}
+
+function initModVditor(){
+  if(S.modVditor) return;
+  S.modVditor = new Vditor("modVditor", {
+    lang:"zh_CN", mode:"wysiwyg", height:"100%",
+    cache:{enable:false},
+    toolbar:["emoji","headings","bold","italic","strike","link","|","list","ordered-list","quote","|","table","undo","redo","|","edit-mode","preview"],
+    after:()=>{ S.modReady=true; }
+  });
+}
+
+async function openSharedModule(rel){
+  const path="docs/"+rel;
+  st($("saveStatus"),"打开公共模块 "+rel+" …","warn");
+  try{
+    let sha, content;
+    if(S.mode==="token"){
+      const data=await api("/repos/"+S.owner+"/"+S.name+"/contents/"+path+"?ref=main");
+      sha=data.sha; content=b64decode(data.content||"");
+    }else{
+      const data=await api("/api/file/"+encodeURIComponent(path));
+      sha=data.sha; content=data.content;
+    }
+    S.modCur=rel;
+    S.modData={path,sha,content,original:content};
+    $("modPath").textContent=path;
+    $("modSaveBtn").disabled=false;
+    if(S.modVditor) S.modVditor.setValue(content);
+    renderModuleChips();
+    renderMatrix();
+    st($("saveStatus"),"已打开公共模块，改完点「保存此模块」","ok");
+  }catch(e){ st($("saveStatus"),"打开失败："+e.message,"err"); }
+}
+
+async function saveSharedModule(){
+  if(!S.modData) return;
+  const content=S.modVditor? S.modVditor.getValue() : "";
+  if(content===S.modData.original){ st($("saveStatus"),"模块内容无变化","warn"); return; }
+  const msg=prompt("提交说明","docs: 更新公共模块 "+S.modCur);
+  if(msg===null) return;
+  try{
+    if(S.mode==="token"){
+      await api("/repos/"+S.owner+"/"+S.name+"/contents/"+S.modData.path,{
+        method:"PUT", body:JSON.stringify({message:msg,content:b64encode(content),sha:S.modData.sha,branch:"main"})
+      });
+      const data=await api("/repos/"+S.owner+"/"+S.name+"/contents/"+S.modData.path+"?ref=main");
+      S.modData={path:S.modData.path,sha:data.sha,content,original:content};
+    }else{
+      await api("/api/file/"+encodeURIComponent(S.modData.path),{
+        method:"PUT", body:JSON.stringify({message:msg,content,sha:S.modData.sha})
+      });
+      const data=await api("/api/file/"+encodeURIComponent(S.modData.path));
+      S.modData={path:S.modData.path,sha:data.sha,content,original:content};
+    }
+    st($("saveStatus"),"公共模块已保存，所有引用它的产品页会同步更新。","ok");
+  }catch(e){ st($("saveStatus"),"保存失败："+e.message,"err"); }
+}
+
+function matrixModules(){
+  // columns: top-level shared + key series
+  return S.files.filter(p=>p.startsWith("docs/shared/")&&p.endsWith(".md"))
+    .map(p=>p.replace(/^docs\//,"")).sort((a,b)=>{
+      const rank=x=>x.split("/").length===2?0:1;
+      return rank(a)-rank(b)||a.localeCompare(b);
+    });
+}
+
+function renderMatrix(){
+  const wrap=$("matrixWrap");
+  const mods=matrixModules();
+  const products=S.files.filter(p=>/^docs\/products\/[^/]+\/index\.md$/.test(p)).sort();
+  // load includes lazily from S.matrixCache
+  if(!S.matrixCache) S.matrixCache={};
+  const pending=products.filter(p=>!(p in S.matrixCache));
+  // build table shell
+  let html="<table class='matrix'><thead><tr><th>产品</th>";
+  mods.forEach((m,i)=>{
+    html+="<th style='writing-mode:horizontal-tb;max-width:72px;font-size:11px' title='"+m+"'>"
+      +(MODULE_TITLES[m]||m.split("/").pop().replace(/\.md$/,""))+"<br><small>"+i+"</small></th>";
+  });
+  html+="</tr></thead><tbody>";
+  products.forEach(p=>{
+    const slug=productSlugFromPath(p)||p;
+    html+="<tr><td class='prod'>"+slug+"</td>";
+    const inc=S.matrixCache[p];
+    mods.forEach(m=>{
+      const on=inc && inc[m];
+      html+="<td><input type='checkbox' data-prod='"+p+"' data-mod='"+m+"' "+(on?"checked":"")+" /></td>";
+    });
+    html+="</tr>";
+  });
+  html+="</tbody></table>";
+  wrap.innerHTML=html+"<div style='font-size:12px;color:var(--muted);padding:8px' id='matrixHint'></div>";
+  if(pending.length){
+    $("matrixHint").textContent="正在读取 "+pending.length+" 个产品已包含的模块…";
+    loadIncludesFor(pending, mods).then(()=>{
+      renderMatrix();
+      st($("saveStatus"),"矩阵已就绪","ok");
+    }).catch(e=>{
+      $("matrixHint").textContent="读取失败："+e.message;
+    });
+  }else{
+    $("matrixHint").textContent="已就绪。勾选后点「写入所有产品页」。";
+  }
+}
+
+async function loadIncludesFor(paths, mods){
+  for(const p of paths){
+    let content;
+    if(S.mode==="token"){
+      const data=await api("/repos/"+S.owner+"/"+S.name+"/contents/"+p+"?ref=main");
+      content=b64decode(data.content||"");
+    }else{
+      const data=await api("/api/file/"+encodeURIComponent(p));
+      content=data.content||"";
+    }
+    const inc={};
+    const re=/--8<--\s+"(shared\/[^"]+)"/g; let m;
+    while((m=re.exec(content))) inc[m[1]]=true;
+    S.matrixCache[p]=inc;
+  }
+}
+
+function matrixSelectAll(state){
+  const col=S.modCur; // if a module selected, apply to that column; else all
+  document.querySelectorAll("#matrixWrap input[type=checkbox]").forEach(cb=>{
+    if(!col || cb.dataset.mod===col) cb.checked=state;
+  });
+}
+
+async function applyMatrixToProducts(){
+  const boxes=[...document.querySelectorAll("#matrixWrap input[type=checkbox]")];
+  const byProd={};
+  boxes.forEach(cb=>{
+    const p=cb.dataset.prod, m=cb.dataset.mod;
+    byProd[p]=byProd[p]||{};
+    byProd[p][m]=cb.checked;
+  });
+  const n=Object.keys(byProd).length;
+  if(!confirm("将把包含关系写入 "+n+" 个产品页（可能提交多次）。继续？")) return;
+  st($("saveStatus"),"正在写入产品页…","warn");
+  let ok=0, fail=0;
+  for(const p of Object.keys(byProd)){
+    try{
+      let sha, content;
+      if(S.mode==="token"){
+        const data=await api("/repos/"+S.owner+"/"+S.name+"/contents/"+p+"?ref=main");
+        sha=data.sha; content=b64decode(data.content||"");
+      }else{
+        const data=await api("/api/file/"+encodeURIComponent(p));
+        sha=data.sha; content=data.content||"";
+      }
+      const want=byProd[p];
+      const had={};
+      const re=/--8<--\s+"(shared\/[^"]+)"/g; let m;
+      while((m=re.exec(content))) had[m[1]]=true;
+      // remove unchecked
+      Object.keys(had).forEach(mod=>{
+        if(!want[mod]){
+          const title=MODULE_TITLES[mod];
+          content=content.replace(new RegExp("^--8<--\\s+\""+mod.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+"\"\\n?","gm"),"");
+          if(title){
+            content=content.replace(new RegExp("^##\\s+"+title.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+"\\s*\\n+","gm"),"");
+            content=content.replace(/(?:^---\s*\n){2,}/gm,"---\n").replace(/\n{3,}/g,"\n\n");
+          }
+        }
+      });
+      const toAdd=Object.keys(want).filter(mod=>want[mod]&&!had[mod]);
+      if(toAdd.length){
+        const block=toAdd.map(mod=>"## "+(MODULE_TITLES[mod]||mod)+"\n\n--8<-- \""+mod+"\"\n").join("\n---\n\n");
+        const insert="\n---\n\n"+block+"\n---\n\n";
+        if(/## 免责声明/.test(content)) content=content.replace(/## 免责声明/, insert+"## 免责声明");
+        else content=content.replace(/\s*$/, "\n\n"+insert);
+      }
+      const msg="docs: update shared includes for "+p.replace("docs/","");
+      if(S.mode==="token"){
+        await api("/repos/"+S.owner+"/"+S.name+"/contents/"+p,{
+          method:"PUT", body:JSON.stringify({message:msg,content:b64encode(content),sha,branch:"main"})
+        });
+      }else{
+        await api("/api/file/"+encodeURIComponent(p),{
+          method:"PUT", body:JSON.stringify({message:msg,content,sha})
+        });
+      }
+      S.matrixCache[p]=want;
+      ok++;
+      st($("saveStatus"),"写入中… "+ok+"/"+n,"warn");
+    }catch(e){
+      fail++;
+      console.error(p,e);
+    }
+  }
+  st($("saveStatus"),"完成：成功 "+ok+"，失败 "+fail+"。约 1–2 分钟后官网更新。", fail?"err":"ok");
 }
 
 // ---- 傻瓜链接 ----
@@ -544,8 +830,9 @@ async function loadFiles(){
       const data=await api("/api/files");
       S.files=data.files.filter(f=>f.path.endsWith(".md")).map(f=>f.path).sort();
     }
+    S.matrixCache={};
     renderList();
-    st($("saveStatus"),"共 "+S.files.length+" 个页面。选择左侧文件开始编辑。","ok");
+    st($("saveStatus"),"共 "+S.files.length+" 个页面。可切换「公共模块中心」统一管理。","ok");
   }catch(e){ st($("saveStatus"),"加载失败："+e.message,"err"); }
 }
 
