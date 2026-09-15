@@ -61,6 +61,16 @@ header h1{margin:0;font-size:17px}
 .adm.danger{border-color:#b91c1c;background:#fee2e2}
 .adm.tip{border-color:#0f766e;background:#ccfbf1}
 .adm.note{border-color:#475569;background:#f1f5f9}
+.snip-card{
+  border:2px dashed #0f766e;border-radius:12px;padding:14px 16px;margin:12px 0;
+  background:#f0fdfa;color:#134e4a;font-size:14px;line-height:1.6;
+}
+.snip-card b{display:block;font-size:15px;margin-bottom:4px;color:#115e59}
+.snip-card small{color:#0f766e;font-size:12px}
+.snip-card .snip-open{
+  display:inline-block;margin-top:8px;padding:6px 12px;background:#0f766e;color:#fff;
+  border-radius:8px;font-size:12px;cursor:pointer;border:0;font-weight:600;
+}
 .login{max-width:520px;margin:6vh auto;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:var(--shadow)}
 .login h2{margin:0 0 6px}
 .login .desc{color:var(--muted);font-size:13px;line-height:1.6;margin-bottom:8px}
@@ -361,9 +371,49 @@ function restoreImagesForSave(md, pagePath){
   return md;
 }
 
-function preprocessPreview(html){
-  return html;
+// 把 --8<-- "shared/xxx.md" 显示成卡片；保存时再还原
+function expandSnippets(md){
+  if(!md) return md;
+  return md.replace(/--8<--\s+"(shared\/[^"]+)"/g, (all, path)=>{
+    const title = MODULE_TITLES[path] || path;
+    return '\n\n<div class="snip-card" data-snippet="'+path+'">'
+      + '<b>引用公共章节：'+title+'</b>'
+      + '<div>路径：<code>'+path+'</code></div>'
+      + '<small>此处在构建时自动插入该文件正文。请到左侧「公共模块」修改，所有产品同步。</small>'
+      + '<br><button type="button" class="snip-open" data-open="'+path+'">打开此公共模块</button>'
+      + '</div>\n\n';
+  });
 }
+
+function collapseSnippets(md){
+  if(!md) return md;
+  // HTML cards → original snippet
+  md = md.replace(/<div class="snip-card"[\s\S]*?data-snippet="([^"]+)"[\s\S]*?<\/div>/g, (all, path)=>{
+    return '--8<-- "'+path+'"';
+  });
+  // 若 Vditor 把卡片拆成纯文本，再兜底扫一遍
+  md = md.replace(/引用公共章节：[^\n]*\n[\s\S]*?(shared\/[\w./-]+\.md)[\s\S]*?(?=\n---|\n## |$)/g, (all, path)=>{
+    if(all.indexOf('--8<--')>=0) return all;
+    return '--8<-- "'+path+'"';
+  });
+  // 纯文本形式的按钮残留
+  md = md.replace(/\n*打开此公共模块\n*/g, "\n");
+  return md;
+}
+
+async function fetchSnippetPreview(path){
+  try{
+    const full = "docs/" + path;
+    if(S.mode==="token"){
+      const data=await api("/repos/"+S.owner+"/"+S.name+"/contents/"+full+"?ref=main");
+      return b64decode(data.content||"");
+    }
+    const data=await api("/api/file/"+encodeURIComponent(full));
+    return data.content||"";
+  }catch(e){ return ""; }
+}
+
+function preprocessPreview(html){ return html; }
 
 function mdToEditor(md){
   if(!md) return "";
@@ -464,14 +514,25 @@ async function openFile(path){
 
 function getEditorValue(){
   if(!S.vditor) return "";
-  const raw = S.vditor.getValue() || "";
+  let raw = S.vditor.getValue() || "";
+  raw = collapseSnippets(raw);
   if(S.cur && S.cur.path) return restoreImagesForSave(raw, S.cur.path);
   return raw;
 }
 function setEditorValue(md){
   if(!S.vditor) return;
-  S.vditor.setValue(md||"");
+  S.vditor.setValue(expandSnippets(md||""));
 }
+
+// 卡片上的「打开此公共模块」
+document.addEventListener("click", (e)=>{
+  const btn = e.target.closest && e.target.closest("[data-open]");
+  if(!btn) return;
+  e.preventDefault();
+  const rel = btn.getAttribute("data-open");
+  const path = "docs/" + rel;
+  openFile(path);
+});
 
 function discard(){
   if(!S.cur) return;
