@@ -190,6 +190,36 @@ input[type=text],input[type=password]{width:100%;padding:11px 12px;border:1px so
   </div>
 </div>
 
+<div class="modal" id="linkModal">
+  <div class="card" style="width:min(560px,100%)">
+    <h3>插入 / 修改链接</h3>
+    <p style="font-size:13px;color:var(--muted);margin:0 0 8px">三步：填显示文字 → 点目标或填网址 → 插入。</p>
+
+    <label>① 页面上显示的文字</label>
+    <input type="text" id="linkText" placeholder="例如：去淘宝购买 / 查看 H7D Pro 说明书" />
+
+    <label>② 常用链接（点一下自动填好）</label>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px">
+      <button type="button" class="btn ghost" onclick="quickLink('site')">官网首页</button>
+      <button type="button" class="btn ghost" onclick="quickLink('qq')">QQ 群号</button>
+      <button type="button" class="btn ghost" onclick="quickLink('taobao')">淘宝店</button>
+      <button type="button" class="btn ghost" onclick="quickLink('catalog')">产品总目录</button>
+      <button type="button" class="btn ghost" onclick="quickLink('support')">技术支持页</button>
+    </div>
+
+    <label>跳到站内其它产品说明书</label>
+    <select id="linkProduct" style="width:100%;padding:11px 12px;border:1px solid #64748b;border-radius:10px;font-size:14px;background:#fff;color:var(--text)"></select>
+
+    <label>③ 或直接填网址 / 路径</label>
+    <input type="text" id="linkUrl" placeholder="https://... 或 products/h7d-pro/index.md" />
+
+    <div class="row">
+      <button class="btn ghost" onclick="closeLinkModal()">取消</button>
+      <button class="btn primary" onclick="applyLink()">插入链接</button>
+    </div>
+  </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/vditor@3.10.9/dist/index.min.js"></script>
 <script>
 const LS = { w:"frc_worker", p:"frc_pass", t:"frc_token", r:"frc_repo", m:"frc_mode" };
@@ -292,13 +322,15 @@ function initVditor(){
     height: "100%",
     cache: { enable: false },
     toolbar: [
-      "emoji","headings","bold","italic","strike","link",
+      "emoji","headings","bold","italic","strike",
+      {name:"link-easy", tipTitle:"插入链接（推荐）", tip:"插入链接", text:"链接", click(){ openLinkModal(); }},
       "|","list","ordered-list","check","quote",
       "|","line","table","code",
       "|","undo","redo",
       "|","edit-mode","fullscreen","outline","preview",
       {name:"adm-tip", tipTitle:"插入提示框", tip:"插入提示框", text:"提示框", click(){ insertAdm("tip"); }},
-      {name:"adm-warn", tipTitle:"插入警告框", tip:"插入警告框", text:"警告框", click(){ insertAdm("warning"); }}
+      {name:"adm-warn", tipTitle:"插入警告框", tip:"插入警告框", text:"警告框", click(){ insertAdm("warning"); }},
+      {name:"img-easy", tipTitle:"上传图片", tip:"上传图片", text:"图片", click(){ uploadImage(); }}
     ],
     preview: {
       markdown: { mark: true },
@@ -317,6 +349,87 @@ function insertAdm(kind){
   const titles={tip:"提示",warning:"注意",info:"说明",danger:"危险",note:"备注"};
   const md=`\n\n!!! ${kind} "${titles[kind]||kind}"\n\n    在这里写内容。\n\n`;
   if(S.vditor) S.vditor.insertValue(md);
+}
+
+// ---- 傻瓜链接 ----
+const PRESETS = {
+  site: { text: "FlyingRC 官网", url: "https://www.FlyingRC.cn" },
+  qq: { text: "官方 QQ 群 1016199449", url: "https://qm.qq.com/" },
+  taobao: { text: "FlyingRC 淘宝店", url: "https://www.taobao.com" },
+  catalog: { text: "产品总目录", url: "catalog.md" },
+  support: { text: "技术支持", url: "shared/support.md" }
+};
+
+function productSlugFromPath(p){
+  const m = (p||"").match(/^docs\/products\/([^/]+)\/index\.md$/);
+  return m ? m[1] : null;
+}
+
+function relToProduct(targetSlug){
+  // from current product page
+  const curSlug = S.cur && productSlugFromPath(S.cur.path);
+  if(curSlug && S.cur.path.indexOf("/products/")>=0){
+    return "../" + targetSlug + "/index.md";
+  }
+  // from shared/ or other
+  return "products/" + targetSlug + "/index.md";
+}
+
+function openLinkModal(){
+  if(!S.vditor){ st($("saveStatus"),"请先打开一个文件","warn"); return; }
+  // prefill selected text
+  let sel = "";
+  try{
+    const dom = S.vditor.vditor && S.vditor.vditor.element;
+    const wsel = window.getSelection();
+    if(wsel && wsel.toString()) sel = wsel.toString().trim();
+  }catch(e){}
+  $("linkText").value = sel || "";
+  $("linkUrl").value = "";
+  const selEl = $("linkProduct");
+  selEl.innerHTML = "<option value=\"\">（不选产品，用上面的网址）</option>";
+  S.files.filter(p=>/^docs\/products\/[^/]+\/index\.md$/.test(p)).forEach(p=>{
+    const slug = productSlugFromPath(p);
+    const opt = document.createElement("option");
+    opt.value = slug;
+    opt.textContent = slug + "  —  " + p.replace("docs/products/","").replace("/index.md","");
+    selEl.appendChild(opt);
+  });
+  $("linkModal").classList.add("on");
+  setTimeout(()=>{ $("linkText").focus(); }, 50);
+}
+function closeLinkModal(){ $("linkModal").classList.remove("on"); }
+
+function quickLink(kind){
+  const p = PRESETS[kind];
+  if(!p) return;
+  if(!$("linkText").value) $("linkText").value = p.text;
+  $("linkUrl").value = p.url;
+  $("linkProduct").value = "";
+}
+
+function applyLink(){
+  const text = ($("linkText").value||"").trim() || "链接";
+  let url = ($("linkUrl").value||"").trim();
+  const prod = $("linkProduct").value;
+  if(prod){
+    url = relToProduct(prod);
+  }
+  if(!url){
+    st($("saveStatus"),"请点常用链接、选产品，或填写网址","warn");
+    return;
+  }
+  // strip surrounding quotes
+  url = url.replace(/^["']|["']$/g,"");
+  const md = "[" + text + "](" + url + ")";
+  if(S.vditor) S.vditor.insertValue(md);
+  closeLinkModal();
+  st($("saveStatus"),"已插入链接，记得「保存并发布」","ok");
+}
+
+function editExistingLinkInSelection(){
+  // future: if cursor is in a link, open modal prefilled
+  openLinkModal();
 }
 
 const RAW_BASE = "https://raw.githubusercontent.com/Vulkanowrs/flyingrc-manuals/main/";
@@ -693,6 +806,15 @@ async function createFile(){
 }
 
 $("saveMsg") && $("saveMsg").addEventListener("keydown", e=>{ if(e.key==="Enter") confirmSave(); });
+$("linkUrl") && $("linkUrl").addEventListener("keydown", e=>{ if(e.key==="Enter") applyLink(); });
+$("linkText") && $("linkText").addEventListener("keydown", e=>{ if(e.key==="Enter") $("linkUrl").focus(); });
+$("linkProduct") && $("linkProduct").addEventListener("change", e=>{
+  if(e.target.value){
+    const slug = e.target.value;
+    if(!$("linkText").value) $("linkText").value = "查看 " + slug + " 说明书";
+    $("linkUrl").value = "";
+  }
+});
 $("teamPass") && $("teamPass").addEventListener("keydown", e=>{ if(e.key==="Enter") login(); });
 $("tokenInput") && $("tokenInput").addEventListener("keydown", e=>{ if(e.key==="Enter") login(); });
 
