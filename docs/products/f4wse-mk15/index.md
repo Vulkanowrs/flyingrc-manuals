@@ -21,29 +21,53 @@
 ![](../../assets/f4wse-mk15/img04.png)
 
 | 基础参数 | 传感器 |  |  |
+
 |------|------|------|------|
+
 | 型 号 | FlyingRC® F4WSE | IMU(陀螺仪和加速度计) | ICM-42688-P |
+
 | 尺 寸 | 20mm*40mm*9mm | 气 压 计 | SPL06-001 |
+
 | 质 量 | 9g | 磁 力 计 | 无板载磁力计 |
+
 |  |  | 模拟OSD | AT7465E |
+
 | 主控 | 电源输出 |  |  |
+
 | 主控芯片 | 主控STM32F405RGT6 | BEC芯片型号 | MP9943+MP9447 |
+
 | 主频 | 168 MHz | 板载降压模块BEC-设备 | 5V2A |
+
 | Flash | 1 MB | 板载降压模块BEC-舵机 | 5V4A |
+
 | RAM | 192 k |  |  |
+
 | 接口 | 固件 |  |  |
+
 | UART | 5组串口， | Betaflight | 支持(出厂默认) |
+
 |  | UART1,UART3, UART4，UART5， | INAV | 支持 |
+
 |  | UART6 | Ardupilot | 支持 |
+
 | PWM | 基础版6个+高阶版6个，其中一个LED | PX4 | 不支持 |
+
 | I2C | 1 |  |  |
+
 | 电流 ADC 采样 | 支持，持续40A，瞬间80A |  |  |
+
 | SWD调试 | 无 | 工作环境 |  |
+
 | 蜂鸣器接口 | 有，支持无源蜂鸣器 | VBAT供电范围 | 7-28V DC IN  2-6S LiPo |
+
 | LED灯带接口 | 支持WS2812 | 电源输入 | 同VBAT供电范围 |
+
 | USB-TYPE-C | 外置USB小板 | 工作温度范围 | -10-100℃ |
+
 | 黑匣子存储 | 外接TF卡模块，可用容量4-8GB，最高支持32GB | 存储温度范围 | 0-40℃ |
+
 | SBUS | 飞控内置反向器 |  |  |
+
 |  | 连接至任意UART2　RX接口 |  |  |
 
 ![](../../assets/f4wse-mk15/img05.png)
@@ -119,12 +143,19 @@ TF卡小板与连接线焊接线序
 PWM扩展接口引脚定义
 
 | 引脚序号 | 引脚名称 | 引脚定义 |
+
 |------|------|------|
+
 | 1 | S12 | PWM_CH12 电调/舵机 |
+
 | 2 | S11 | PWM_CH11电调/舵机 |
+
 | 3 | S10 | PWM_CH10电调/舵机 |
+
 | 4 | S9 | PWM_CH9电调/舵机 |
+
 | 5 | S8 | PWM_CH8电调/舵机 |
+
 | 6 | S7 | PWM_CH7电调/舵机 |
 
 ### 飞控与舵机扩展板焊接线序
@@ -168,42 +199,79 @@ Ardupilot固件使用教程请点击：FlyingRC® F4Wing MK5使用教程
 ![](../../assets/f4wse-mk15/img19.png)
 
 | 插口功能定义图 |  |  |  |
+
 |------|------|------|------|
+
 | 插口 | 定义 | 功能 | 说明 |
+
 | 数字图传 | VCC | DJI图传VCC | 图传供电 |
+
 |  | GND | 电源地 | 主功率地， |
+
 |  | RX | 串口 1 接收 RX | 图传→飞控上行回传数据 |
+
 |  | TX | 串口 1 发送 TX | 飞控→图传下行数据 |
+
 |  | GND | 信号参考地 | 图传信号专用地线，抗干扰 |
+
 |  | SBUS | SBUS 遥控信号输入 | 接收机 SBUS 信号线接入，接收遥控器指令 |
+
 | SBUS接收机 | SBUS | SBUS 遥控信号输入 | SBUS 遥控信号输入，接收遥控器指令 |
+
 |  | 5V | USB 供电 | 电脑 USB5V 输入，可单独给飞控上电调试 |
+
 |  | GND | USB 参考地 | USB 信号接地 |
+
 | 定位系统 | 4V5 | GPS 模块供电 | 4.5V 稳压输出，给 GPS + 电子罗盘供电 |
+
 |  | GND | GPS 模块地 | 定位模组公共地线 |
+
 |  | R4 | 串口 4 接收 RX | GPS 模块 TX→飞控 RX，读取定位坐标数据 |
+
 |  | T4 | 串口 4 发送 TX | 飞控 TX→GPS 模块 RX，下发配置指令 |
+
 |  | SDA | I2C 数据总线 | 连接板载 / 外置电子罗盘，读取地磁航向数据 |
+
 |  | SCL | I2C 时钟总线 | 罗盘 I2C 通信时钟信号 |
+
 | 接收机 | 4V5 | 接收机 模块供电 | 4.5V 稳压输出，给 接收机供电 |
+
 |  | GND | 接收机 模块地 | 接收机接地 |
+
 |  | R6 | 串口 6 接收 RX | 接收机 模块 TX→飞控 RX，读取接收机数据 |
+
 |  | T6 | 串口 6 发送 TX | 飞控 TX→接收机 模块 RX，下发指令 |
+
 | 电调 | VBAT | 电调供电 | 直接接入主电源，给飞控与电调回路供电 |
+
 |  | GND | 功率主地 | 电调地线汇总 |
+
 | 电池 | BAT IN | 动力电池输入 | 主电源 |
+
 |  | GND | 功率主地 | 动力电池负极 |
+
 | VTX 图传 | VBAT | VTX DC IN | 动力电池电压供电 |
+
 |  | GND | VTX GND | 电源地 |
+
 |  | AV IN | 摄像头 CAM | 视频信号输入 |
+
 | 摄像头 | CAM | CAM AV | 模拟视频信号 |
+
 |  | VBAT | CAM VCC | 电池电压给摄像头供电 |
+
 |  | GND | CAM GND | 共地 |
+
 | I2C设备 | SDA | I2C 数据总线 | I2C 数据总线 |
+
 |  | SCL | I2C 时钟总线 | I2C 时钟总线 |
+
 |  | GND | 模块地 | 模块地 |
+
 |  | 4V5 | 4.5V 稳压供电 | 4.5V 稳压供电 |
+
 | 蜂鸣器 | VCC | 蜂鸣器正极 | 供电 |
+
 |  | BZ- | 蜂鸣器负极 | 蜂鸣器驱动负极 |
 
 ELRS接收机 - 查看产品说明书和购买链接
@@ -232,11 +300,15 @@ GPS - 查看产品说明书和购买链接
 
 带SBUS数字图传 (DJI,Walksnail)
 
+![](../../assets/f4wse-mk15/img24.jpeg)
+
 ### 与带SBUS数字图传连接接线图
 
 ESC- 查看产品说明书和购买链接
 
 与FlyingRC® AM32 Mini 40A电调连接接线图
+
+![](../../assets/f4wse-mk15/img25.jpeg)
 
 飞控焊盘均在板上有文字标出其功能，如，T4代表UART4 TX端口，R1代表USART1 RX端口。
 
@@ -249,20 +321,35 @@ I/0接口/串口映射
 PWM输出功能
 
 | PWM Group |  | PWM Channels | GPIO | Timer | DMA/DShot |
+
 |------|------|------|------|------|------|
+
 | Group1 | PWM 5V tolerant I/O | S1 | PWM1 GPIO50 | TIM8_CH4 | DMA/DShot |
+
 |  |  | S2 | PWM2 GPIO51 | TIM8_CH3 | DMA/DShot |
+
 | Group2 |  | S3 | PWM3 GPIO52 | TIM1_CH3N | DMA/DShot |
+
 |  |  | S4 | PWM4 GPIO53 | TIM1_CH1 | DMA/DShot |
+
 | Goup3 |  | S5 | PWM5 GPIO54 | TIM2_CH4 | DMA/DShot |
+
 |  |  | S6 | PWM6 GPIO55 | TIM2_CH3 | DMA/DShot |
+
 |  |  | S7 | PWM7 GPIO56 | TIM2_CH2 | DMA/DShot |
+
 |  |  | S8 | PWM8 GPIO57 | TIM2_CH1 | DMA/DShot |
+
 | Goup4 |  | S9 | PWM9 GPIO58 | TIM12_CH1 | NO DMA |
+
 | Goup5 |  | S10 | PWM10 GPIO59 | TIM13_CH1 | NO DMA |
+
 | Goup6 |  | S11 | PWM11 GPIO60 | TIM4_CH1 | NO DMA |
+
 | Goup7 |  | LED pad | PWM12 GPIO61 | TIM3_CH4 | DMA/DShot |
+
 |  |  |  | SERVO12_FUNCTION 120, NTF_LED_TYPES neopixel |  |  |
+
 | 输出通道对DShot与常规PWM混合工作模式设有分组限制： / 即对某一分组内的任一输出通道启用DShot协议时，该分组下所有输出通道均需统一配置并作为DShot通道使用，不可与PWM通道混用。 / 若同一分组内同时接入舵机与电机，需确保该分组按照舵机规格参数运行最低PWM频率。 / 例如：若舵机最高支持50Hz，则该分组下的电调也必须工作在50Hz。 |  |  |  |  |  |
 
 LED pad为PWM扩展版S12端口，可以接WS2812灯带显示飞控状态
@@ -274,15 +361,25 @@ S9~S11无DMA功能，不能使用DShot协议电调
 串口映射对应列表
 
 |  | PCB 丝印 | UART 编号 | 协议 Protocol | 配置 Config | SERIAL_X |
+
 |------|------|------|------|------|------|
+
 | UART 5V tolerant I/O | USB | USB |  | console | SERIAL0 |
+
 |  | TX1 RX1 | USART1 | with DMA | telem1 | SERIAL1 |
+
 |  | TX3 RX3 | USART3 | NO DMA | telem2 | SERIAL2 |
+
 |  | TX5 RX5 | UART5 | NO DMA | GPS1 | SERIAL3 |
+
 |  | TX4 RX4 | UART4 | NO DMA | USER | SERIAL4 |
+
 |  | TX6 RX6 | USART6 | TX6 with DMA | USER | SERIAL5 |
+
 |  | SBUS | USART2 | with DMA | RC input/Receiver | SERIAL6 |
+
 |  |  |  |  | BRD_ALT_CONFIG 0 Default |  |
+
 |  |  | Sbs pad | SBUS |  |  |
 
 Ardupilot固件UART/USART与SERIAL对应关系，及其默认功能
@@ -294,11 +391,17 @@ USART2因为飞控体积原因仅引出SBUS焊盘，RX2，TX2功能不可用
 I2C总线
 
 | I2C 编号 |  | 配置 Config | 参数 Parameterl | Value |
+
 |------|------|------|------|------|
+
 | I2C1 | 5V tolerant I/O | Compass | COMPASS_AUTODEC | 1 |
+
 |  |  | onboard Baro SPL06 - 001 | Address | 0x76 |
+
 |  |  | Digital Airspeed I2C | ARSPD_BUS | 1 |
+
 |  |  | MS4525 | ARSPD_TYPE | 1 |
+
 |  |  | DLVLR - L10D | ARSPD_TYPE | 9 |
 
 内置气压计占用0x76地址，不可在外部接入任何地址为0x76的设备
@@ -306,7 +409,9 @@ I2C总线
 ADC模拟信号输入
 
 | RSSI Pad | 0 - 3.3V | RSSI ADC | RSSI_ANA_PIN | 8 |
+
 |------|------|------|------|------|
+
 |  |  | Analog RSSI | RSSI_TYPE | 2 |
 
 也可用于外接电流计，用法见此，PIN值如表中所示为8
@@ -333,6 +438,8 @@ INAV通用参数设置：
 
 若遇技术问题，建议先查阅产品说明书；也可前往AI平台、B站等渠道获取帮助。同时欢迎群友互相协助，分享已知解决方案。
 
+![](../../assets/f4wse-mk15/img26.png)
+
 请注意：本产品Ardupilot固件提供有限技术支持，INAV和BF固件无技术支持
 
 ## 五、维修服务
@@ -349,6 +456,8 @@ INAV通用参数设置：
 
 折扣规则：按淘宝店正常售价7折购买全新同款同配置产品；换新品不再享受维修和售后服务。
 
+![](../../assets/f4wse-mk15/img27.jpeg)
+
 付费维修寄送要求：
 
 客户寄修前请先电话或微信联系工作人员，说明电路损坏原因与故障情况，确认是否可修。
@@ -362,23 +471,41 @@ INAV通用参数设置：
 因客户参数设置错误导致产品异常，工程师重新刷固件或校正参数的，将收取检测费 10–20 元。
 
 | 维修内容 | 项目编号 | 更换芯片型号 | 材料费+手工费=维修费 |
+
 |------|------|------|------|
+
 | 飞控主控 | 1 | STM32F405RGT6 | 30+15=45 |
+
 |  | 2 | STM32H743VIT6 | 50+30=80 |
+
 |  | 3 | STM32H743VIH6 | 65+45=110 |
+
 | 电调主控 | 4 | QF32F4AK8U7 | 8+10=18 |
+
 |  | 5 | AT32F421K8U7 | 6+10=16 |
+
 | 飞控传感器 | 6 | ICM-42688-P | 70+12=82 |
+
 |  | 7 | ICM-42605 | 50+12=62 |
+
 |  | 8 | SPL06 | 4+10=16 |
+
 |  | 9 | DPS310/DPS368 | 25+12=37 |
+
 | 飞控电源芯片 | 10 | MP9943 | 7+10=17 |
+
 |  | 11 | MP9447 | 10+10=20 |
+
 |  | 12 | MP9942 | 8+10=18 |
+
 |  | 13 | LM25148 | 26+15=41 |
+
 |  | 14 | LDO | 4+5=9 |
+
 | 电调场效应管 | 15 | IRF7480 | 5+5=10 |
+
 |  | 16 | HYG022N04LS1C1 | 3+5=8 |
+
 | 其它元器件 | 17 | 电阻、电容、插座等 | 2+5=7 |
 
 注：表格里是单一原件维修价格。

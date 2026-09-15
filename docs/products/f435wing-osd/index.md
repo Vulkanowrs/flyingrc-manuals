@@ -17,28 +17,51 @@
 ![](../../assets/f435wing-osd/img04.jpeg)
 
 | 基础参数 | 传  感  器 |  |  |
+
 |------|------|------|------|
+
 | 型      号 | FlyingRC® F435Wing Mini | IMU(陀螺仪和加速度计) | BMI270 |
+
 | 尺      寸 | 27.96mm*20.29mm*11.4mm | 气 压 计 | SPA06-003 |
+
 | 安  装 孔 | 17.8mm*17.8mm  M1.2 | 磁 力 计 | 无 |
+
 | 未焊排针质量 | 3.1g | 模拟OSD | AT7456F |
+
 | 焊好排针质量 | 5.1g |  |  |
+
 | 焊好排针+底座质量 | 6.1g |  |  |
+
 | 主       控 | 电源输出 |  |  |
+
 | 主控芯片 | AT32F435CGU7（CMU7） | 板载降压模块 BEC | 无 |
+
 | 主频 | 288 MHz |  |  |
+
 | Flash | 1MB（4MB） |  |  |
+
 | RAM | 384k |  |  |
+
 | 接       口 | 固件支持 |  |  |
+
 | UART | 3组串口（UART1，UART4 - DJI高清图传接口，UART5） | INAV | 支持 |
+
 | PWM | 7（其中一个为LED接口） | Ardupilot | 不支持 |
+
 | I2C | 1 | Betaflight | 不支持 |
+
 | 电流 ADC 采样 | 无 | PX4 | 不支持 |
+
 | SWD 调试 | 无 |  |  |
+
 | 蜂鸣器接口 | 1 | 工作环境 |  |
+
 | LED 灯带接口 | 支持WS2812 | VBAT 供电范围 | 2.5-30V，1-6S LiPo |
+
 | USB - TYPE - C | 板载直插 | 电  源  输  入 | 5V |
+
 | 黑匣子存储 | 无 | 工作温度范围 | -10-100℃ |
+
 | SBUS | 1 | 存储温度范围 | 0-40℃ |
 
 ![](../../assets/f435wing-osd/img05.png)
@@ -130,19 +153,29 @@ TypeC接口直插飞控，连接稳定，寿命更长，可通过双C线连接�
 **1.电池电压输入引脚定义**
 
 | 引脚序号 | 引脚名称 | 引脚定义 |
+
 |------|------|------|
+
 | 1 | - | 接电池负极 |
+
 | 2 | + | 接电池正极，仅飞控供电与电压传感器监测 |
 
 **2.高清图传直插引脚定义**
 
 | 引脚序号 | 引脚名称 | 引脚定义 |
+
 |------|------|------|
+
 | 1 | SBUS | DJI SBUS遥控信号输入 (UART2) |
+
 | 2 | G | GND （负极） |
+
 | 3 | R4 | OSD MSP RX (UART4) |
+
 | 4 | T4 | OSD MSP |
+
 | 5 | G | GND （负极） |
+
 | 6 | V | 电池直连供电 |
 
 ### 飞控接线及固件
@@ -168,38 +201,71 @@ AP固件具体设置请参考飘飘大佬教程：FlyingRC® F4Wing Mini MK1飞�
 外置独立BEC可以选择店内售卖的FlyingRC® 5A BEC V1
 
 | 插口功能定义表 |  |  |  |  |
+
 |------|------|------|------|------|
+
 | 丝印 | 插口 | 定义 | 功能 | 说明 |
+
 | DJI | 数字图传 | VCC | 图传电源输入 | 主供电，直接接动力电池正极 |
+
 |  |  | GND | 图传地 | 主功率地，与动力电池负极相连 |
+
 |  |  | TX | 串口发送 TX | 飞控→图传下行数据 |
+
 |  |  | RX | 串口接收 RX | 图传→飞控上行回传数据 |
+
 |  |  | GND | 信号参考地 | 图传信号专用地线，抗干扰 |
+
 |  |  | SBUS | SBUS 遥控信号输入 | 接收机 SBUS 信号线接入，接收遥控器指令 |
+
 | +- | 电源输入 | + | 电源正极 | 直接连接电池，注意图传是否兼容电池电压 |
+
 |  |  | - | 电源负极 | 直接连接电池，注意图传是否兼容电池电压 |
+
 | 排针功能定义表（MCU左侧） |  |  |  |  |
+
 | 功能 | 丝印 | 定义 | 功能 | 说明 |
+
 | GPS（I2C） | DA1 | SDA | I2C 数据总线 | 连接板载 / 外置电子罗盘，读取地磁航向数据 |
+
 |  | CL1 | SCL | I2C 时钟总线 | 罗盘 I2C 通信时钟信号 |
+
 |  | T5 | TX | 串口 5 发送 TX | 飞控 TX→GPS 模块 RX，下发配置指令 |
+
 |  | R5 | RX | 串口 5 接收 RX | GPS 模块 TX→飞控 RX，读取定位坐标数据 |
+
 |  | 4V5 | 4V5 | GPS 模块供电 | 4.5V 稳压输出，给 GPS供电 |
+
 |  | GND | GND | GPS 模块地 | GPS接地 |
+
 | CRSF接收机 | T1 | TX | 串口 1 发送 TX | 飞控 TX→接收机 模块 RX，下发指令 |
+
 |  | R1 | RX | 串口 1 接收 RX | 接收机 模块 TX→飞控 RX，读取数据 |
+
 |  | 4V5 | 4V5 | 接收机 模块供电 | 4.5V 稳压输出，给 接收机供电 |
+
 |  | GND | GND | 接收机 模块地 | 接收机接地 |
+
 | 排针功能定义表（MCU下侧） |  |  |  |  |
+
 | 功能 | 丝印 | 定义 | 功能 | 说明 |
+
 | SBUS接收机 | SBUS | SBUS | SBUS 遥控信号 | 3.3V 稳压电源，给存储卡模块供电 |
+
 |  | 4V5 | 4V5 | 接收机 模块供电 | 4.5V 稳压输出，给 接收机供电 |
+
 |  | G | GND | 接收机 模块地 | 接收机接地 |
+
 | 5V供电 | S1 | —— | —— |  |
+
 |  | 5V | 5V | 5VBEC输入>飞控供电 |  |
+
 |  | GND | GND | 接地 |  |
+
 | 电机&舵机 | S2-S6/S12 | S2-S6/S12 | 电机&舵机信号 |  |
+
 |  | 5V | 5V | 电机&舵机供电 |  |
+
 |  | G | GND | 接地 |  |
 
 ![](../../assets/f435wing-osd/img10.jpeg)
@@ -217,14 +283,23 @@ AP固件具体设置请参考飘飘大佬教程：FlyingRC® F4Wing Mini MK1飞�
 PWM输出功能
 
 | Group1 | PWM  5V / tolerant I/O | S1 | PWM1 GPIO50 | TIM8_CH4 | DMA/DShot |
+
 |------|------|------|------|------|------|
+
 |  |  | S2 | PWM2 GPIO51 | TIM8_CH3 | DMA/DShot |
+
 | Group2 |  | S3 | PWM3 GPIO52 | TIM1_CH3N | DMA/DShot |
+
 |  |  | S4 | PWM4 GPIO53 | TIM1_CH1 | DMA/DShot |
+
 | Goup3 |  | S5 | PWM5 GPIO54 | TIM2_CH4 | DMA/DShot |
+
 |  |  | S6 | PWM6 GPIO55 | TIM2_CH3 | DMA/DShot |
+
 | Goup7 |  | LED pad | PWM12 GPIO61 | TIM3_CH4 | DMA/DShot |
+
 |  |  |  | SERVO12_FUNCTION 120, NTF_LED_TYPES neopixel |  |  |
+
 | 输出通道对DShot与常规PWM混合工作模式设有分组限制：即对某一分组内的任一输出通道启用DShot协议时，该分组下所有输出通道均需统一配置并作为DShot通道使用，不可与PWM通道混用。 / 若同一分组内同时接入舵机与电机，需确保该分组按照舵机规格参数运行最低PWM频率。例如：若舵机最高支持50Hz，则该分组下的电调也必须工作在50Hz。 |  |  |  |  |  |
 
 S12端口可接LED，通过WS2812灯带显示飞控状态（AP固件）
@@ -236,12 +311,19 @@ S12端口可接LED，通过WS2812灯带显示飞控状态（AP固件）
 串口映射
 
 | UART 5V tolerant I/O | USB | USB |  | console | SERIAL0 |
+
 |------|------|------|------|------|------|
+
 |  | TX1 RX1 | USART1 | with DMA | RC input/Receiver | SERIAL1 |
+
 |  | TX5 RX5 | UART5 | NO DMA | GPS1 | SERIAL3 |
+
 |  | TX4 RX4 | UART4 | NO DMA | MSP OSD | SERIAL4 |
+
 |  | SBUS | USART2 | with DMA | NOT Available | SERIAL6 |
+
 |  |  |  |  | BRD_ALT_CONFIG 0 Default |  |
+
 |  |  | Sbs pad | SBUS |  |  |
 
 Ardupilot固件UART/USART与SERIAL对应关系，及其默认功能
@@ -253,10 +335,15 @@ Ardupilot固件UART/USART与SERIAL对应关系，及其默认功能
 I2C设备
 
 | I2C | I2C1 | 5V tolerant I/O | Compass | COMPASS_AUTODEC | 1 |
+
 |------|------|------|------|------|------|
+
 |  |  |  | onboard Baro SPL06 - 001 | Address | 0x76 |
+
 |  |  |  | Digital Airspeed I2C | ARSPD_BUS | 1 |
+
 |  |  |  | MS4525 | ARSPD_TYPE | 1 |
+
 |  |  |  | DLVLR - L10D | ARSPD_TYPE | 9 |
 
 内置气压计占用0x76地址，不可在外部接入任何地址为0x76的设备

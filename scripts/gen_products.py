@@ -251,7 +251,7 @@ def extract_assets(docx_path: Path, media_names: list[str], slug: str):
         if not name.startswith("word/"):
             mapping["word/" + name] = rel
         kept += 1
-        if kept >= 24:
+        if kept >= 80:
             break
     return mapping
 
