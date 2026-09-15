@@ -372,3 +372,30 @@ l4-can-adapter:
   manual_url: /manual/l4-can-adapter/
   firmware_url: /downloads/l4-can-adapter/
   migrated_from: WPS docx
+
+h7wlite-mk2:
+  name: "FlyingRC® H7Wlite MK2"
+  category: flight-controller
+  status: active
+  short_code: h7wlite
+  manual_url: /manual/h7wlite-mk2/
+  firmware_url: /downloads/h7wlite-mk2/
+  migrated_from: WPS docx
+
+esc-4in1-75a:
+  name: "FlyingRC® 4IN1 75A ESC"
+  category: esc
+  status: active
+  short_code: 4in175
+  manual_url: /manual/esc-4in1-75a/
+  firmware_url: /downloads/esc-4in1-75a/
+  migrated_from: WPS docx
+
+esc-mini-40a:
+  name: "FlyingRC® AM32 Mini 40A"
+  category: esc
+  status: active
+  short_code: mini40
+  manual_url: /manual/esc-mini-40a/
+  firmware_url: /downloads/esc-mini-40a/
+  migrated_from: WPS docx

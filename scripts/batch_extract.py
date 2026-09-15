@@ -42,6 +42,9 @@ SLUGS = {
     "FlyingRC® RM3100 SPI Module 罗盘模块.docx": "rm3100-spi",
     "FlyingRC® 数传模块.docx": "telemetry",
     "FlyingRC®I2C 外置电流计产品手册.docx": "i2c-current",
+    "FlyingRC® H7Wlite H743 MK2控固定翼飞控产品手册.docx": "h7wlite-mk2",
+    "FlyingRC 4IN1 75A ESC 金封四合一电调产品说明书.docx": "esc-4in1-75a",
+    "FlyingRC Mini ESC 40A V1.0 说明书.docx": "esc-mini-40a",
 }
 
 SKIP_EN = ("英文",)

@@ -1,6 +1,6 @@
 # 产品总目录
 
-FlyingRC® 全系列一览（口径 2026-08-15）。
+FlyingRC® 全系列一览。
 
 ## 已迁入本站
 
@@ -12,8 +12,11 @@ FlyingRC® 全系列一览（口径 2026-08-15）。
 | FlyingRC® F4D MK1 | [打开](products/f4d-mk1/index.md) |
 | FlyingRC® F4WSE MK1.5 | [打开](products/f4wse-mk15/index.md) |
 | FlyingRC® F435Wing Mini OSD | [打开](products/f435wing-osd/index.md) |
+| FlyingRC® H7Wlite MK2 | [打开](products/h7wlite-mk2/index.md) |
 | AM32 75A ESC V2.5 | [打开](products/am32-75a-v25/index.md) |
 | FlyingRC® 4IN1 45A ESC | [打开](products/esc-4in1-45a/index.md) |
+| FlyingRC® 4IN1 75A ESC | [打开](products/esc-4in1-75a/index.md) |
+| FlyingRC® AM32 Mini 40A | [打开](products/esc-mini-40a/index.md) |
 | FlyingRC® AM32 Dual 40A | [打开](products/esc-dual-40a/index.md) |
 | FlyingRC® AM32 75A CAN | [打开](products/esc-75a-can/index.md) |
 | FlyingRC® AM32 电调控制板 | [打开](products/esc-control-board/index.md) |
@@ -33,8 +36,6 @@ FlyingRC® 全系列一览（口径 2026-08-15）。
 | FlyingRC® ELRS 2.4G 真分集 | [打开](products/elrs-24g/index.md) |
 | FlyingRC® 12S 440A 分电板 | [打开](products/pdb-12s-440a/index.md) |
 | FlyingRC® AM32 调参器 | [打开](products/am32-programmer/index.md) |
-
-下表中标注「已迁入」的条目，也可从左侧「产品说明书」菜单直接进入。
 
 ---
 

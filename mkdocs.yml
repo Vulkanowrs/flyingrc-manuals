@@ -82,9 +82,12 @@ nav:
           - FlyingRC® F4D MK1: products/f4d-mk1/index.md
           - FlyingRC® F4WSE MK1.5: products/f4wse-mk15/index.md
           - FlyingRC® F435Wing Mini OSD: products/f435wing-osd/index.md
+          - FlyingRC® H7Wlite MK2: products/h7wlite-mk2/index.md
       - 电调:
           - AM32 75A ESC V2.5: products/am32-75a-v25/index.md
           - FlyingRC® 4IN1 45A ESC: products/esc-4in1-45a/index.md
+          - FlyingRC® 4IN1 75A ESC: products/esc-4in1-75a/index.md
+          - FlyingRC® AM32 Mini 40A: products/esc-mini-40a/index.md
           - FlyingRC® AM32 Dual 40A: products/esc-dual-40a/index.md
           - FlyingRC® AM32 75A CAN: products/esc-75a-can/index.md
           - FlyingRC® AM32 电调控制板: products/esc-control-board/index.md
