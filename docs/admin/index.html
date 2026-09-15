@@ -309,12 +309,62 @@ function insertAdm(kind){
   if(S.vditor) S.vditor.insertValue(md);
 }
 
+const RAW_BASE = "https://raw.githubusercontent.com/Vulkanowrs/flyingrc-manuals/main/";
+
+function resolveRelToAbs(src, pagePath){
+  if(!src) return src;
+  if(/^(https?:|data:)/.test(src)) return src;
+  let path = src.replace(/^\.\//,"");
+  const dir = pagePath.split("/").slice(0,-1).join("/"); // docs/products/foo
+  const parts = (dir + "/" + path).split("/");
+  const stack = [];
+  parts.forEach(p=>{ if(p==="..") stack.pop(); else if(p!=="." && p!=="") stack.push(p); });
+  return RAW_BASE + stack.join("/");
+}
+
+function resolveImagesForEdit(md, pagePath){
+  if(!md) return md;
+  // markdown images
+  md = md.replace(/!\[([^\]]*)\]\(([^)\s]+)(\s+"[^"]*")?\)/g, (all, alt, src, title)=>{
+    const abs = resolveRelToAbs(src, pagePath);
+    return "![" + alt + "](" + abs + (title||"") + ")";
+  });
+  // html img
+  md = md.replace(/<img([^>]*?)src=["']([^"']+)["']/gi, (all, pre, src)=>{
+    return "<img" + pre + "src=\"" + resolveRelToAbs(src, pagePath) + "\"";
+  });
+  return md;
+}
+
+function absToRel(src, pagePath){
+  if(!src || src.indexOf(RAW_BASE)!==0) return src;
+  let rest = src.slice(RAW_BASE.length); // docs/assets/...
+  const dir = pagePath.split("/").slice(0,-1).join("/");
+  const from = dir.split("/"); // docs, products, foo
+  const to = rest.split("/");  // docs, assets, ...
+  // drop common prefix
+  let i=0;
+  while(i<from.length && i<to.length && from[i]===to[i]) i++;
+  const up = from.length - i;
+  const rel = new Array(up).fill("..").concat(to.slice(i)).join("/");
+  return rel || rest;
+}
+
+function restoreImagesForSave(md, pagePath){
+  if(!md) return md;
+  md = md.replace(/!\[([^\]]*)\]\((https:\/\/raw\.githubusercontent\.com\/[^)\s]+)(\s+"[^"]*")?\)/g, (all, alt, src, title)=>{
+    return "![" + alt + "](" + absToRel(src, pagePath) + (title||"") + ")";
+  });
+  md = md.replace(/<img([^>]*?)src=["'](https:\/\/raw\.githubusercontent\.com\/[^"']+)["']/gi, (all, pre, src)=>{
+    return "<img" + pre + "src=\"" + absToRel(src, pagePath) + "\"";
+  });
+  return md;
+}
+
 function preprocessPreview(html){
-  // 若 Vditor 已把 markdown 转 html，再把残留 !!! 转成卡片（尽力而为）
   return html;
 }
 
-// 预处理：把 pymdownx admonition 转成 HTML，便于所见即所得阅读
 function mdToEditor(md){
   if(!md) return "";
   return md.replace(/^!!!\s+(\w+)\s+"([^"]*)"\s*\n((?:[ \t]+.*\n?)*)/gm, (all, kind, title, body)=>{
@@ -401,18 +451,22 @@ async function openFile(path){
       sha=data.sha; content=data.content;
     }
     S.cur={path,sha,content,original:content};
-    setEditorValue(content);
+    // 编辑器里用绝对地址显示图片，保存时再转回相对路径
+    const editMd = resolveImagesForEdit(content, path);
+    setEditorValue(editMd);
     $("curPath").textContent=path;
     $("saveBtn").disabled=false;
     $("modBtn").disabled=!isProductPage(path);
     renderList();
-    st($("saveStatus"),"已打开。可直接像 Word 一样编辑，改完点「保存并发布」。","ok");
+    st($("saveStatus"),"已打开，图片已按仓库路径加载。改完点「保存并发布」。","ok");
   }catch(e){ st($("saveStatus"),"打开失败："+e.message,"err"); }
 }
 
 function getEditorValue(){
-  if(!S.vditor) return $("vditor")? ($("vditor").innerText||"") : "";
-  return S.vditor.getValue();
+  if(!S.vditor) return "";
+  const raw = S.vditor.getValue() || "";
+  if(S.cur && S.cur.path) return restoreImagesForSave(raw, S.cur.path);
+  return raw;
 }
 function setEditorValue(md){
   if(!S.vditor) return;
@@ -510,9 +564,9 @@ async function doUploadImage(ev){
     }else{
       await api("/api/upload",{method:"POST",body:JSON.stringify({path,contentBase64:b64,message:"assets: "+path})});
     }
-    const rel="../../"+path.replace(/^docs\//,"");
-    if(S.vditor) S.vditor.insertValue("!["+f.name+"]("+rel+")");
-    st($("saveStatus"),"图片已上传并插入。保存说明书后官网生效。","ok");
+    const abs = RAW_BASE + path;
+    if(S.vditor) S.vditor.insertValue("!["+f.name+"]("+abs+")");
+    st($("saveStatus"),"图片已上传并插入。保存说明书后，会写成相对路径，官网可正常显示。","ok");
   }catch(e){ st($("saveStatus"),"上传失败："+e.message,"err"); }
   ev.target.value="";
 }
